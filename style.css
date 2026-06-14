@@ -1,0 +1,212 @@
+/* =========================================
+   全局变量与重置
+========================================= */
+:root {
+    --bg-main: #0f172a; /* 深邃科技蓝底色 */
+    --bg-sec: #1e293b;
+    --text-main: #f1f5f9;
+    --text-sec: #94a3b8;
+    --primary: #38bdf8; /* 荧光蓝亮色 */
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* 如果你更喜欢亮色模式（白底），请把上面的变量替换为：
+:root {
+    --bg-main: #ffffff;
+    --bg-sec: #f8fafc;
+    --text-main: #0f172a;
+    --text-sec: #64748b;
+    --primary: #2563eb;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
+    --transition: all 0.3s ease;
+}
+*/
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', -apple-system, "PingFang SC", sans-serif;
+    line-height: 1.6;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    overflow: hidden; /* 隐藏全局滚动条 */
+}
+
+/* 中英双语切换逻辑 */
+html[lang="zh"] .en { display: none !important; }
+html[lang="en"] .zh { display: none !important; }
+
+/* =========================================
+   分栏布局结构 (Left/Right Split)
+========================================= */
+.layout-container {
+    display: flex;
+    height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- 左侧边栏 (Sidebar) --- */
+.sidebar {
+    width: 45%;
+    padding: 80px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.avatar {
+    width: 100px; height: 100px; border-radius: 50%;
+    margin-bottom: 20px; border: 2px solid var(--card-border);
+}
+
+.name { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
+.title { font-size: 1.1rem; color: var(--primary); font-weight: 500; margin-bottom: 20px; }
+.bio { color: var(--text-sec); font-size: 1rem; line-height: 1.6; margin-bottom: 40px; max-width: 320px; }
+
+/* 导航目录 (Scroll Spy) */
+.nav-menu { display: flex; flex-direction: column; gap: 16px; }
+.nav-link {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--text-sec);
+    font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    width: max-content; transition: var(--transition);
+}
+.nav-line {
+    display: inline-block; width: 30px; height: 1px;
+    background-color: var(--text-sec); transition: var(--transition);
+}
+.nav-link:hover, .nav-link.active { color: var(--text-main); }
+.nav-link:hover .nav-line, .nav-link.active .nav-line {
+    width: 60px; background-color: var(--text-main);
+}
+
+/* 底部联系方式区 */
+.sidebar-bottom { display: flex; align-items: center; gap: 16px; }
+.icon-btn {
+    color: var(--text-sec); transition: var(--transition);
+    display: flex; align-items: center; justify-content: center;
+}
+.icon-btn:hover { color: var(--text-main); transform: translateY(-2px); }
+
+.lang-btn {
+    background: transparent; color: var(--text-main);
+    border: 1px solid var(--card-border); padding: 6px 14px;
+    border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: var(--transition); margin-left: auto;
+}
+.lang-btn:hover { background: var(--text-main); color: var(--bg-main); }
+
+/* --- 右侧滚动内容 (Main Content) --- */
+.content {
+    width: 55%;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 80px 40px 80px 20px;
+    scroll-behavior: smooth;
+    /* 隐藏滚动条让视觉更干净 */
+    scrollbar-width: none; 
+}
+.content::-webkit-scrollbar { display: none; }
+
+.section { margin-bottom: 100px; }
+.section-title {
+    font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-main); margin-bottom: 30px; font-weight: 600;
+}
+
+.section-content p { color: var(--text-sec); font-size: 1.05rem; margin-bottom: 20px; }
+.section-content b { color: var(--text-main); }
+
+/* 标签 */
+.skills { display: flex; flex-wrap: wrap; gap: 10px; }
+.skill-tag {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem;
+}
+.mt-3 { margin-top: 16px; }
+
+/* =========================================
+   互动交互卡片 (HCI Spotlight Effect)
+========================================= */
+.cards-grid { display: flex; flex-direction: column; gap: 20px; }
+
+.interactive-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: background 0.3s;
+}
+
+.interactive-card:hover {
+    background: rgba(255, 255, 255, 0.05); /* 鼠标悬浮背景微亮 */
+}
+
+/* 手电筒追踪光晕核心代码 */
+.interactive-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 0) var(--mouse-y, 0), 
+        rgba(56, 189, 248, 0.1), /* 你的主题光晕颜色 */
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    pointer-events: none; /* 防止光晕阻挡文字选择 */
+}
+
+.interactive-card:hover::before { opacity: 1; }
+
+.card-content { position: relative; z-index: 2; padding: 24px; }
+
+/* 卡片内部排版 */
+.badges { display: flex; gap: 8px; margin-bottom: 12px; }
+.badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; background: var(--card-border); color: var(--text-sec); }
+.badge.highlight { color: var(--primary); background: rgba(56, 189, 248, 0.1); }
+
+.pub-title, .project-title { font-size: 1.1rem; color: var(--text-main); margin-bottom: 8px; line-height: 1.4; }
+.pub-authors { font-size: 0.9rem; color: var(--text-sec); }
+.pub-authors b { color: var(--primary); }
+
+.interactive-card p { font-size: 0.95rem; color: var(--text-sec); margin-top: 8px; }
+
+/* =========================================
+   时间线重构 (融合交互卡片)
+========================================= */
+.timeline { display: flex; flex-direction: column; gap: 16px; }
+.timeline-date { font-size: 0.85rem; color: var(--text-sec); margin-bottom: 4px; font-family: monospace;}
+.timeline h4 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px;}
+
+.footer { padding-top: 40px; padding-bottom: 20px; font-size: 0.85rem; color: var(--text-sec); }
+
+/* =========================================
+   移动端响应式 (变成上下滚动)
+========================================= */
+@media (max-width: 900px) {
+    .layout-container { flex-direction: column; height: auto; overflow: visible; }
+    body { overflow: visible; }
+    
+    .sidebar {
+        width: 100%; height: auto; padding: 40px 24px; position: relative;
+    }
+    .nav-menu { display: none; /* 手机端隐藏侧边目录 */ }
+    
+    .content {
+        width: 100%; height: auto; padding: 0 24px 40px 24px; overflow: visible;
+    }
+    
+    /* 手机端取消复杂的光晕效果，节省性能 */
+    .interactive-card::before { display: none; }
+}
