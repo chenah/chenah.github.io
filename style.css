@@ -6,9 +6,11 @@
     --bg-sec: #1e293b;
     --text-main: #f1f5f9;
     --text-sec: #94a3b8;
-    --primary: #38bdf8; /* 荧光蓝亮色 */
-    --card-bg: rgba(255, 255, 255, 0.03);
+    --primary: #60a5fa; /* 冷蓝主色（更克制高级） */
+    --accent: #fbbf24;  /* 琥珀辅助色（冷暖对比点缀） */
+    --card-bg: rgba(148, 163, 184, 0.05); /* 带蓝调的玻璃质感 */
     --card-border: rgba(255, 255, 255, 0.1);
+    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;
 }
 
@@ -31,6 +33,11 @@ body {
     font-family: 'Inter', -apple-system, "PingFang SC", sans-serif;
     line-height: 1.6;
     background-color: var(--bg-main);
+    /* 极淡的网格纹理，让大块深色背景不死板（透明度很低，不抢戏） */
+    background-image:
+        linear-gradient(rgba(96, 165, 250, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
     color: var(--text-main);
     overflow: hidden; /* 隐藏全局滚动条 */
 }
@@ -64,9 +71,27 @@ html[lang="en"] .zh { display: none !important; }
 .avatar {
     width: 100px; height: 100px; border-radius: 50%;
     margin-bottom: 20px; border: 2px solid var(--card-border);
+    /* 呼吸光晕：呼应整页光晕主题 */
+    animation: avatar-pulse 3s ease-in-out infinite;
 }
 
-.name { font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
+@keyframes avatar-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0); }
+    50% { box-shadow: 0 0 0 8px rgba(96, 165, 250, 0.12), 0 0 24px rgba(96, 165, 250, 0.15); }
+}
+
+.name {
+    font-size: 2.5rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px;
+    /* 蓝→琥珀渐变文字，作为整页视觉锚点 */
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+.name span { display: block; }
+.name .en { font-size: 1.6rem; opacity: 0.85; }
+
 .title { font-size: 1.1rem; color: var(--primary); font-weight: 500; margin-bottom: 20px; }
 .bio { color: var(--text-sec); font-size: 1rem; line-height: 1.6; margin-bottom: 40px; max-width: 320px; }
 
@@ -80,11 +105,11 @@ html[lang="en"] .zh { display: none !important; }
 }
 .nav-line {
     display: inline-block; width: 30px; height: 1px;
-    background-color: var(--text-sec); transition: var(--transition);
+    background-color: var(--text-sec); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .nav-link:hover, .nav-link.active { color: var(--text-main); }
 .nav-link:hover .nav-line, .nav-link.active .nav-line {
-    width: 60px; background-color: var(--text-main);
+    width: 60px; background-color: var(--primary);
 }
 
 /* 底部联系方式区 */
@@ -115,10 +140,17 @@ html[lang="en"] .zh { display: none !important; }
 }
 .content::-webkit-scrollbar { display: none; }
 
-.section { margin-bottom: 100px; }
+.section { margin-bottom: 88px; }
 .section-title {
     font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;
     color: var(--text-main); margin-bottom: 30px; font-weight: 600;
+    display: flex; align-items: center; gap: 12px;
+}
+/* section-title 左侧主色竖条：视觉标识 */
+.section-title::before {
+    content: ""; display: inline-block;
+    width: 3px; height: 18px; border-radius: 2px;
+    background: linear-gradient(180deg, var(--primary), var(--accent));
 }
 
 .section-content p { color: var(--text-sec); font-size: 1.05rem; margin-bottom: 20px; }
@@ -129,6 +161,10 @@ html[lang="en"] .zh { display: none !important; }
 .skill-tag {
     background: var(--card-bg); border: 1px solid var(--card-border);
     color: var(--primary); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem;
+    transition: var(--transition);
+}
+.skill-tag:hover {
+    color: var(--accent); border-color: rgba(251, 191, 36, 0.4);
 }
 .mt-3 { margin-top: 16px; }
 
@@ -140,15 +176,18 @@ html[lang="en"] .zh { display: none !important; }
 .interactive-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 12px;
+    border-radius: 16px;
     position: relative;
     overflow: hidden;
     cursor: default;
-    transition: background 0.3s;
+    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .interactive-card:hover {
-    background: rgba(255, 255, 255, 0.05); /* 鼠标悬浮背景微亮 */
+    background: rgba(148, 163, 184, 0.08); /* 鼠标悬浮背景微亮 */
+    transform: translateY(-2px);           /* 微上浮，呼应高级感 */
+    border-color: rgba(96, 165, 250, 0.25);
+    box-shadow: var(--shadow-soft);
 }
 
 /* 手电筒追踪光晕核心代码 */
@@ -158,7 +197,7 @@ html[lang="en"] .zh { display: none !important; }
     top: 0; left: 0; right: 0; bottom: 0;
     background: radial-gradient(
         600px circle at var(--mouse-x, 0) var(--mouse-y, 0), 
-        rgba(56, 189, 248, 0.1), /* 你的主题光晕颜色 */
+        rgba(96, 165, 250, 0.12), /* 主色光晕 */
         transparent 40%
     );
     opacity: 0;
@@ -174,7 +213,7 @@ html[lang="en"] .zh { display: none !important; }
 /* 卡片内部排版 */
 .badges { display: flex; gap: 8px; margin-bottom: 12px; }
 .badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; background: var(--card-border); color: var(--text-sec); }
-.badge.highlight { color: var(--primary); background: rgba(56, 189, 248, 0.1); }
+.badge.highlight { color: var(--accent); background: rgba(251, 191, 36, 0.12); }
 
 .pub-title, .project-title { font-size: 1.1rem; color: var(--text-main); margin-bottom: 8px; line-height: 1.4; }
 .pub-authors { font-size: 0.9rem; color: var(--text-sec); }
@@ -190,6 +229,31 @@ html[lang="en"] .zh { display: none !important; }
 .timeline h4 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px;}
 
 .footer { padding-top: 40px; padding-bottom: 20px; font-size: 0.85rem; color: var(--text-sec); }
+
+/* =========================================
+   滚动入场动画 (配合 IntersectionObserver)
+========================================= */
+.reveal-init {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal-in {
+    opacity: 1;
+    transform: translateY(0);
+    /* 动画结束后清除延迟，避免 hover 时的 transition-delay 干扰 */
+    transition-delay: 0ms !important;
+}
+
+/* =========================================
+   无障碍：系统开启「减少动态效果」时关闭动画
+========================================= */
+@media (prefers-reduced-motion: reduce) {
+    .avatar { animation: none; }
+    .reveal-init { opacity: 1; transform: none; transition: none; }
+    .nav-line { transition: none; }
+    * { scroll-behavior: auto !important; }
+}
 
 /* =========================================
    移动端响应式 (变成上下滚动)
@@ -209,4 +273,7 @@ html[lang="en"] .zh { display: none !important; }
     
     /* 手机端取消复杂的光晕效果，节省性能 */
     .interactive-card::before { display: none; }
+
+    /* 手机端 content 不再是滚动容器，入场动画依赖它，故直接显示 */
+    .reveal-init { opacity: 1; transform: none; transition: none; }
 }
