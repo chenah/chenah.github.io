@@ -18,7 +18,7 @@ function PixelAvatar() {
       initial={{ opacity: 0, y: 80, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="group/avatar relative aspect-square w-[min(92vh,72vw)] min-w-[470px] max-w-[880px] sm:min-w-[620px]"
+      className="group/avatar relative aspect-square w-[86vw] max-w-[400px] sm:w-[min(92vh,72vw)] sm:max-w-[880px] sm:min-w-[560px]"
       data-testid="pixel-avatar"
       data-cursor="hover"
     >
@@ -99,7 +99,7 @@ export function Hero() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.9, duration: 0.7 }}
-        className="absolute left-4 top-[29%] z-30 max-w-[250px] sm:bottom-8 sm:left-8 sm:top-auto sm:max-w-sm"
+        className="absolute left-4 top-[34%] z-30 max-w-[230px] sm:bottom-8 sm:left-8 sm:top-auto sm:max-w-sm"
       >
         <p className="mb-3 text-[0.82rem] font-medium leading-snug">{hero.sub}</p>
         <p className="font-mono text-[0.56rem] font-bold uppercase tracking-[0.14em] text-[#282c20]/70">{hero.now}</p>

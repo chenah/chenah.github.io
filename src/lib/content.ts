@@ -158,12 +158,12 @@ export const experience: ExperienceItem[] = [
   {
     date: "2022 — 2024",
     role: "MSc in Data Science and Analytics",
-    org: "The Hong Kong Polytechnic University · GPA 3.44/4.3",
+    org: "The Hong Kong Polytechnic University",
   },
   {
     date: "2017 — 2021",
     role: "BEng in Computer Science and Technology",
-    org: "Southwest University · GPA 3.55/5.0",
+    org: "Southwest University",
   },
 ];
 
