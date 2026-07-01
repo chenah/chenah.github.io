@@ -41,13 +41,23 @@ npm run lint
 
 ## 部署到 GitHub Pages / Deploy
 
-`next build` 会在 `out/` 生成纯静态文件。
+`next build` 会在 `out/` 生成纯静态文件。`.github/workflows/deploy.yml` 已配置好：
+每次 push 到 `main` 分支时自动构建并发布到 GitHub Pages（免费）。
 
-1. **用户主页**（仓库名为 `<用户名>.github.io`）：无需额外配置，直接发布 `out/`。
-2. **项目主页**（其它仓库名）：在 `next.config.ts` 设置
-   `basePath` / `assetPrefix` 为 `"/<仓库名>"`，再发布 `out/`。
+**首次启用只需两步（在 GitHub 网页操作，一次性）：**
 
-可用 GitHub Actions 自动构建并发布 `out/` 到 Pages。
+1. 仓库改名为 `<你的用户名>.github.io`（Settings → 顶部 Rename），
+   这样站点会发布在根域名 `https://<用户名>.github.io/`。
+   如果保留原仓库名，会发布在 `https://<用户名>.github.io/<仓库名>/`，
+   此时需要在 `next.config.ts` 里加回 `basePath`/`assetPrefix`。
+2. 仓库 Settings → Pages → **Build and deployment → Source** 选择
+   **"GitHub Actions"**（不是 "Deploy from a branch"）。
+
+设置好之后，以后每次 `git push` 到 `main` 都会自动重新构建部署，无需手动操作。
+也可以在仓库的 Actions 标签页手动触发 "Deploy to GitHub Pages" 工作流。
+
+若之后购买了自定义域名，在 `public/CNAME` 文件里写入域名（如 `example.com`），
+并同步更新 `public/robots.txt` / `public/sitemap.xml` 里的域名。
 
 ## 备注 / Notes
 

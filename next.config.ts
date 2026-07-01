@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Static HTML export so the site can still deploy to GitHub Pages.
-  // (For a user page like <name>.github.io no basePath is needed. For a
-  // project page, set basePath/assetPrefix to "/<repo-name>".)
+  // Static HTML export, deployed to GitHub Pages as a user page
+  // (chenah.github.io) — no basePath needed since it serves from the root.
   output: "export",
   images: { unoptimized: true },
   trailingSlash: true,
