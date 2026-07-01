@@ -82,6 +82,64 @@ export function MaskReveal({
   );
 }
 
+/**
+ * Clip-mask reveal for rich headings: the whole block rises out from behind a
+ * clip edge on scroll into view. Unlike MaskReveal it keeps arbitrary inner
+ * markup (line breaks, italic accents), so it suits multi-line display titles.
+ * A small padding/negative-margin pair keeps descenders from being clipped.
+ */
+export function ClipReveal({
+  children,
+  delay = 0,
+  className,
+  mount = false,
+  block = false,
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+  mount?: boolean;
+  /** render full-width block (keeps text-align of a centered/multi-line heading) */
+  block?: boolean;
+}) {
+  const display = block ? "block" : "inline-block";
+  const variants = {
+    hidden: { y: "115%" },
+    shown: { y: "0%" },
+  };
+  // The OUTER wrapper is what the viewport observer watches — it stays in normal
+  // flow (never transformed), so the in-view trigger fires at the right spot.
+  // The inner child does the actual rise, driven by variant propagation. (An
+  // earlier version animated the observed element itself, whose 115% offset
+  // pushed it out of the trigger zone, leaving headings permanently clipped.)
+  return (
+    <motion.span
+      className={className}
+      style={{
+        display,
+        overflow: "hidden",
+        paddingBottom: "0.14em",
+        marginBottom: "-0.14em",
+      }}
+      initial="hidden"
+      {...(mount
+        ? { animate: "shown" }
+        : {
+            whileInView: "shown",
+            viewport: { once: true, margin: "0px 0px -10% 0px" },
+          })}
+    >
+      <motion.span
+        style={{ display, willChange: "transform" }}
+        variants={variants}
+        transition={{ duration: 0.9, ease: EASE, delay }}
+      >
+        {children}
+      </motion.span>
+    </motion.span>
+  );
+}
+
 /** Subtle magnetic pull toward the cursor while hovering. */
 export function Magnetic({
   children,

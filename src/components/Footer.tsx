@@ -2,6 +2,7 @@
 
 import { contact } from "@/lib/content";
 import { useLang } from "@/lib/lang";
+import { ClipReveal, Magnetic } from "@/components/motion-primitives";
 
 export function Footer() {
   const { lang } = useLang();
@@ -10,9 +11,13 @@ export function Footer() {
       <div className="mx-auto max-w-[1440px]">
         <span className="mb-8 block text-[0.65rem] font-bold uppercase tracking-[0.22em] text-lime">05 / {lang === "zh" ? "保持联系" : "Get in touch"}</span>
         <h2 className="font-display text-[clamp(5.4rem,17vw,17rem)] uppercase leading-[0.72] tracking-[-0.04em]">
-          LET’S<br /><span className="font-editorial italic text-lime">CONNECT</span>
+          <ClipReveal block>
+            LET’S<br /><span className="font-editorial italic text-lime">CONNECT</span>
+          </ClipReveal>
         </h2>
-        <a href={`mailto:${contact.email}`} className="mt-14 inline-block max-w-full break-all border-b border-white/35 pb-2 text-[clamp(1rem,2.4vw,2.2rem)] transition-colors hover:border-lime hover:text-lime">{contact.email} ↗</a>
+        <Magnetic strength={0.25} className="mt-14">
+          <a href={`mailto:${contact.email}`} data-cursor="hover" className="inline-block max-w-full break-all border-b border-white/35 pb-2 text-[clamp(1rem,2.4vw,2.2rem)] transition-colors hover:border-lime hover:text-lime">{contact.email} ↗</a>
+        </Magnetic>
         <div className="mt-[clamp(80px,12vw,150px)] flex flex-col gap-7 border-t border-white/20 pt-7 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex gap-2">
             {[

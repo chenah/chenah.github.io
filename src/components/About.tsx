@@ -2,7 +2,7 @@
 
 import { about } from "@/lib/content";
 import { useLang } from "@/lib/lang";
-import { Reveal } from "@/components/motion-primitives";
+import { Reveal, ClipReveal } from "@/components/motion-primitives";
 
 export function About() {
   const { lang, t } = useLang();
@@ -11,16 +11,18 @@ export function About() {
       <div className="mx-auto max-w-[1440px]">
         <Reveal>
           <p className="mb-10 text-center text-[0.65rem] font-bold uppercase tracking-[0.25em] text-lime">01 / Manifesto</p>
-          <h2 className="mx-auto max-w-[1220px] text-center font-display text-[clamp(3rem,8.4vw,8.5rem)] uppercase leading-[0.86] tracking-[-0.035em]">
+        </Reveal>
+        <h2 className="mx-auto max-w-[1220px] text-center font-display text-[clamp(3rem,8.4vw,8.5rem)] uppercase leading-[0.86] tracking-[-0.035em]">
+          <ClipReveal block delay={0.05}>
             {lang === "zh" ? (
               <>让人工智能从<span className="whitespace-nowrap font-editorial italic text-lime">技术可能</span><br />走向<span className="whitespace-nowrap font-editorial italic text-lime">真实应用。</span></>
             ) : (
               <>Turning AI <span className="font-editorial italic text-lime">possibility</span><br />into real-world<br /><span className="font-editorial italic text-lime">applications.</span></>
             )}
-          </h2>
-        </Reveal>
+          </ClipReveal>
+        </h2>
 
-        <div className="mt-[clamp(80px,12vw,160px)] grid gap-14 border-t border-white/20 pt-10 lg:grid-cols-[1.4fr_1fr]">
+        <div className="mt-[clamp(48px,7vw,100px)] grid gap-14 border-t border-white/20 pt-10 lg:grid-cols-[1.4fr_1fr]">
           <Reveal>
             <p className="max-w-3xl text-[clamp(1.15rem,2.2vw,2rem)] leading-[1.35] text-[#d8dacd]">
               {lang === "zh"

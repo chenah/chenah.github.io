@@ -2,7 +2,7 @@
 
 import { projects, type Project } from "@/lib/content";
 import { useLang } from "@/lib/lang";
-import { Reveal } from "@/components/motion-primitives";
+import { Reveal, ClipReveal } from "@/components/motion-primitives";
 
 function PaperFigure({ type }: { type: Project["visual"] }) {
   if (type === "audio") {
@@ -97,7 +97,9 @@ export function Projects() {
       <div className="mx-auto max-w-[1440px]">
         <span className="mb-5 block text-[0.65rem] font-bold uppercase tracking-[0.22em]">04 / Papers into applications</span>
         <h2 className="mb-[clamp(60px,9vw,120px)] font-display text-[clamp(4.5rem,12vw,12rem)] uppercase leading-[0.76]">
-          {lang === "zh" ? <>研究<span className="font-editorial italic">项目</span></> : <>SELECTED <span className="font-editorial italic">WORK</span></>}
+          <ClipReveal block>
+            {lang === "zh" ? <>研究<span className="font-editorial italic">项目</span></> : <>SELECTED <span className="font-editorial italic">WORK</span></>}
+          </ClipReveal>
         </h2>
 
         <div className="grid gap-7 lg:grid-cols-2">

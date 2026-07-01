@@ -2,7 +2,7 @@
 
 import { experience } from "@/lib/content";
 import { useLang } from "@/lib/lang";
-import { Reveal } from "@/components/motion-primitives";
+import { Reveal, ClipReveal } from "@/components/motion-primitives";
 
 export function Experience() {
   const { lang, t } = useLang();
@@ -12,8 +12,21 @@ export function Experience() {
         <div className="lg:sticky lg:top-28 lg:self-start">
           <span className="mb-6 block text-[0.65rem] font-bold uppercase tracking-[0.22em] text-lime">03 / Timeline</span>
           <h2 className="font-display text-[clamp(4.2rem,9vw,9.5rem)] uppercase leading-[0.76]">
-            {lang === "zh" ? <>经历<br /><span className="font-editorial italic text-lime">轨迹</span></> : <>EXPERIENCE<br /><span className="font-editorial italic text-lime">& EDUCATION</span></>}
+            <ClipReveal block>
+              {lang === "zh" ? <>经历<br /><span className="font-editorial italic text-lime">轨迹</span></> : <>EXPERIENCE<br /><span className="font-editorial italic text-lime">& EDUCATION</span></>}
+            </ClipReveal>
           </h2>
+          <Reveal delay={0.1}>
+            <p className="mt-8 max-w-xs text-[0.98rem] leading-relaxed text-[#b9bcae]">
+              {lang === "zh"
+                ? "从计算机科学到数据科学，再到 AI 应用与人机交互——一条持续靠近真实问题的研究路径。"
+                : "From computer science to data science to AI applications and HCI — a path moving steadily toward real-world problems."}
+            </p>
+            <div className="mt-8 flex items-center gap-3 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-lime">
+              <span className="h-px w-10 bg-lime/60" />
+              2017 — {lang === "zh" ? "至今" : "Now"}
+            </div>
+          </Reveal>
         </div>
         <div className="relative border-l border-white/20 pl-7 sm:pl-12">
           {experience.map((item, index) => (
