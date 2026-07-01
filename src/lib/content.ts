@@ -161,6 +161,11 @@ export const experience: ExperienceItem[] = [
     org: "The Hong Kong Polytechnic University",
   },
   {
+    date: "2021 — 2022",
+    role: "Research Assistant",
+    org: "Southern University of Science and Technology",
+  },
+  {
     date: "2017 — 2021",
     role: "BEng in Computer Science and Technology",
     org: "Southwest University",

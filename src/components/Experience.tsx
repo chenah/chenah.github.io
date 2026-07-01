@@ -26,7 +26,7 @@ export function Experience() {
         </div>
         <div className="relative border-l border-white/20 pl-7 sm:pl-12">
           {experience.map((item, index) => (
-            <Reveal key={item.role} delay={index * 0.08}>
+            <Reveal key={item.date} delay={index * 0.08}>
               <article className="relative border-b border-white/20 py-9 first:pt-0 sm:py-12">
                 <span className="absolute -left-[34px] top-2 size-3 rounded-full border-2 border-[#282c20] bg-lime sm:-left-[54px]" />
                 <span className="mb-4 block text-[0.72rem] font-bold uppercase tracking-[0.16em] text-lime">{item.date}</span>
