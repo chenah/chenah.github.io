@@ -4,14 +4,8 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { hero } from "@/lib/content";
-import { useLang } from "@/lib/lang";
 import { MaskReveal, Magnetic } from "@/components/motion-primitives";
 
-/**
- * The portrait is a quiet delight: a retro pixel self-portrait that swaps to an
- * "AI-mode" variant on hover (or tap on touch). Framed like an art plate rather
- * than a game sprite — thin concentric rings and a soft glow, no HUD chrome.
- */
 function PixelAvatar() {
   const [active, setActive] = useState(false);
 
@@ -34,7 +28,7 @@ function PixelAvatar() {
 
       <Image
         src="/characters/chen-pixel-avatar.png"
-        alt="陈光的复古像素肖像"
+        alt="CHEN Guang pixel portrait"
         fill
         priority
         unoptimized
@@ -44,7 +38,7 @@ function PixelAvatar() {
       />
       <Image
         src="/characters/chen-pixel-ai-mode.png"
-        alt="陈光的 AI 模式像素肖像"
+        alt="CHEN Guang AI-mode pixel portrait"
         fill
         priority
         unoptimized
@@ -57,7 +51,6 @@ function PixelAvatar() {
 }
 
 export function Hero() {
-  const { lang, t } = useLang();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const avatarY = useTransform(scrollYProgress, [0, 1], [0, 150]);
@@ -65,7 +58,6 @@ export function Hero() {
 
   return (
     <section ref={ref} id="top" className="contour-bg relative min-h-[100svh] overflow-hidden bg-[#f4f4ed] text-[#282c20]">
-      {/* Editorial plate caption (replaces the game HUD) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -88,13 +80,13 @@ export function Hero() {
           transition={{ delay: 0.15, duration: 0.6 }}
           className="mb-2 text-[0.62rem] font-bold uppercase tracking-[0.24em]"
         >
-          {t(hero.eyebrow)}
+          {hero.eyebrow}
         </motion.p>
         <h1 className="font-display text-[clamp(4.7rem,18vw,17rem)] uppercase leading-[0.76] tracking-[-0.04em]">
           <MaskReveal
             mount
             delay={0.25}
-            text={lang === "zh" ? hero.nameZh : hero.nameEn.join(" ")}
+            text={hero.name.join(" ")}
           />
         </h1>
       </motion.div>
@@ -109,8 +101,8 @@ export function Hero() {
         transition={{ delay: 0.9, duration: 0.7 }}
         className="absolute left-4 top-[29%] z-30 max-w-[250px] sm:bottom-8 sm:left-8 sm:top-auto sm:max-w-sm"
       >
-        <p className="mb-3 text-[0.82rem] font-medium leading-snug">{t(hero.sub)}</p>
-        <p className="font-mono text-[0.56rem] font-bold uppercase tracking-[0.14em] text-[#282c20]/70">{t(hero.now)}</p>
+        <p className="mb-3 text-[0.82rem] font-medium leading-snug">{hero.sub}</p>
+        <p className="font-mono text-[0.56rem] font-bold uppercase tracking-[0.14em] text-[#282c20]/70">{hero.now}</p>
       </motion.div>
 
       <motion.div

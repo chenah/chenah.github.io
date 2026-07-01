@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import { useLenis } from "lenis/react";
 import { brand, navItems } from "@/lib/content";
-import { useLang } from "@/lib/lang";
 
 export function Nav() {
-  const { lang, toggle, t } = useLang();
   const lenis = useLenis();
   const [active, setActive] = useState("about");
   const [open, setOpen] = useState(false);
@@ -33,8 +31,8 @@ export function Nav() {
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-100 flex items-start justify-between p-4 sm:p-6">
       <a href="#top" onClick={(e) => go(e, "top")} className="pointer-events-auto rounded-sm bg-[#f4f4ed]/90 px-1.5 py-1 leading-[0.78] text-[#282c20] backdrop-blur-sm">
-        <span className="block font-editorial text-[1.25rem] sm:text-[1.5rem]">{t(brand).split(" ")[0]}</span>
-        <span className="block font-display text-[1.25rem] uppercase sm:text-[1.5rem]">{lang === "zh" ? "GUANG" : "GUANG"}</span>
+        <span className="block font-editorial text-[1.25rem] sm:text-[1.5rem]">{brand.split(" ")[0]}</span>
+        <span className="block font-display text-[1.25rem] uppercase sm:text-[1.5rem]">GUANG</span>
       </a>
 
       <div className="pointer-events-auto flex items-center gap-2.5">
@@ -46,17 +44,10 @@ export function Nav() {
               onClick={(e) => go(e, item.id)}
               className={`text-[0.68rem] font-bold uppercase tracking-[0.12em] transition-colors ${active === item.id ? "text-[#282c20]" : "text-[#282c20]/45 hover:text-[#282c20]"}`}
             >
-              {t(item.label)}
+              {item.label}
             </a>
           ))}
         </nav>
-        <button
-          onClick={toggle}
-          className="rounded-[11px] bg-lime px-4 py-3 text-[0.72rem] font-bold text-[#282c20] transition-transform hover:-translate-y-0.5"
-          aria-label="Toggle language"
-        >
-          {lang === "zh" ? "EN" : "中文"}
-        </button>
         <button
           onClick={() => setOpen((value) => !value)}
           className="grid size-11 place-items-center rounded-[11px] border-2 border-[#282c20] bg-[#f4f4ed] text-[#282c20]"
@@ -70,11 +61,11 @@ export function Nav() {
       </div>
 
       <div className={`pointer-events-auto fixed inset-0 -z-1 flex flex-col justify-center bg-[#282c20] px-6 text-[#f4f4ed] transition-[clip-path] duration-700 sm:px-12 ${open ? "[clip-path:circle(230%_at_96%_4%)]" : "[clip-path:circle(0%_at_96%_4%)]"}`}>
-        <span className="mb-8 text-xs font-bold uppercase tracking-[0.25em] text-lime">Navigate / 导航</span>
+        <span className="mb-8 text-xs font-bold uppercase tracking-[0.25em] text-lime">Navigate</span>
         {navItems.map((item, index) => (
           <a key={item.id} href={`#${item.id}`} onClick={(e) => go(e, item.id)} className="group flex items-baseline gap-5 border-t border-white/15 py-3 last:border-b">
             <span className="text-xs text-lime">0{index + 1}</span>
-            <span className="font-display text-[clamp(2.8rem,8vw,7rem)] uppercase leading-none transition-transform group-hover:translate-x-4">{t(item.label)}</span>
+            <span className="font-display text-[clamp(2.8rem,8vw,7rem)] uppercase leading-none transition-transform group-hover:translate-x-4">{item.label}</span>
           </a>
         ))}
       </div>

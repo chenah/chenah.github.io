@@ -10,14 +10,14 @@ import { Providers } from "@/components/Providers";
 import { Nav } from "@/components/Nav";
 
 export const metadata: Metadata = {
-  title: "陈光 CHEN Guang | AI Applications PhD",
-  description: "陈光（CHEN Guang），华南理工大学未来技术学院智能科学与技术博士生，研究 AI 应用、人机交互与智能教育。",
+  title: "CHEN Guang | AI Applications PhD",
+  description: "CHEN Guang, PhD student in Intelligent Science and Technology at SCUT School of Future Technology. Research in AI applications, HCI, and intelligent education.",
   icons: { icon: "/icon.svg" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh" className="font-sans antialiased">
+    <html lang="en" className="font-sans antialiased">
       <body>
         <Providers>
           <Nav />

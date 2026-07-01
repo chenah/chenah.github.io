@@ -72,7 +72,7 @@ export function Loader() {
                 transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
                 className="block font-display text-[clamp(3.4rem,11vw,9rem)] uppercase leading-[0.86]"
               >
-                {brand.en}
+                {brand}
               </motion.span>
             </span>
 

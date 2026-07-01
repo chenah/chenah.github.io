@@ -1,18 +1,16 @@
 "use client";
 
 import { contact } from "@/lib/content";
-import { useLang } from "@/lib/lang";
 import { ClipReveal, Magnetic } from "@/components/motion-primitives";
 
 export function Footer() {
-  const { lang } = useLang();
   return (
     <footer id="contact" className="olive-section contour-bg-dark scroll-mt-16 overflow-hidden px-5 pb-8 pt-[clamp(90px,13vw,170px)] sm:px-8 lg:px-16">
       <div className="mx-auto max-w-[1440px]">
-        <span className="mb-8 block text-[0.65rem] font-bold uppercase tracking-[0.22em] text-lime">05 / {lang === "zh" ? "保持联系" : "Get in touch"}</span>
+        <span className="mb-8 block text-[0.65rem] font-bold uppercase tracking-[0.22em] text-lime">05 / Get in touch</span>
         <h2 className="font-display text-[clamp(5.4rem,17vw,17rem)] uppercase leading-[0.72] tracking-[-0.04em]">
           <ClipReveal block>
-            LET’S<br /><span className="font-editorial italic text-lime">CONNECT</span>
+            LET'S<br /><span className="font-editorial italic text-lime">CONNECT</span>
           </ClipReveal>
         </h2>
         <Magnetic strength={0.25} className="mt-14">

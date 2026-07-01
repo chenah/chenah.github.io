@@ -1,7 +1,6 @@
 "use client";
 
 import { projects, type Project } from "@/lib/content";
-import { useLang } from "@/lib/lang";
 import { Reveal, ClipReveal } from "@/components/motion-primitives";
 
 function PaperFigure({ type }: { type: Project["visual"] }) {
@@ -80,7 +79,7 @@ function PaperPreview({ project, index }: { project: Project; index: number }) {
           <span>{project.venue} · {project.year}</span>
           <span>Paper 0{index + 1}</span>
         </div>
-        <h3 className="max-w-[32ch] text-[clamp(0.8rem,1.35vw,1.2rem)] font-bold leading-tight">{project.title.en}</h3>
+        <h3 className="max-w-[32ch] text-[clamp(0.8rem,1.35vw,1.2rem)] font-bold leading-tight">{project.title}</h3>
         <div className="absolute inset-x-5 bottom-5 top-[39%] border-t border-[#282c20]/25 pt-4">
           <PaperFigure type={project.visual} />
         </div>
@@ -91,25 +90,24 @@ function PaperPreview({ project, index }: { project: Project; index: number }) {
 }
 
 export function Projects() {
-  const { lang, t } = useLang();
   return (
     <section id="projects" className="scroll-mt-16 bg-[#f4f4ed] px-5 py-[clamp(90px,13vw,170px)] text-[#282c20] sm:px-8 lg:px-16">
       <div className="mx-auto max-w-[1440px]">
         <span className="mb-5 block text-[0.65rem] font-bold uppercase tracking-[0.22em]">04 / Papers into applications</span>
         <h2 className="mb-[clamp(60px,9vw,120px)] font-display text-[clamp(4.5rem,12vw,12rem)] uppercase leading-[0.76]">
           <ClipReveal block>
-            {lang === "zh" ? <>研究<span className="font-editorial italic">项目</span></> : <>SELECTED <span className="font-editorial italic">WORK</span></>}
+            SELECTED <span className="font-editorial italic">WORK</span>
           </ClipReveal>
         </h2>
 
         <div className="grid gap-7 lg:grid-cols-2">
           {projects.map((project, index) => (
-            <Reveal key={t(project.title)} delay={(index % 2) * 0.08}>
+            <Reveal key={project.title} delay={(index % 2) * 0.08}>
               <a
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`View project: ${t(project.title)}`}
+                aria-label={`View project: ${project.title}`}
                 className={`group block border border-[#282c20] p-4 transition-colors hover:bg-[#eceee4] sm:p-6 ${index % 2 ? "lg:mt-24" : ""}`}
               >
                 <PaperPreview project={project} index={index} />
@@ -121,8 +119,8 @@ export function Projects() {
                   </div>
                   <div className="flex items-start justify-between gap-5">
                     <div>
-                      <h3 className="max-w-[23ch] text-[clamp(1.5rem,2.6vw,2.6rem)] font-semibold leading-[1.08]">{t(project.title)}</h3>
-                      <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#63675b]">{t(project.desc)}</p>
+                      <h3 className="max-w-[23ch] text-[clamp(1.5rem,2.6vw,2.6rem)] font-semibold leading-[1.08]">{project.title}</h3>
+                      <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#63675b]">{project.desc}</p>
                     </div>
                     <span className="grid size-11 shrink-0 place-items-center rounded-full border border-[#282c20] transition-colors group-hover:bg-[#282c20] group-hover:text-lime">↗</span>
                   </div>
