@@ -107,6 +107,7 @@ export function Projects() {
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`View project: ${t(project.title)}`}
                 className={`group block border border-[#282c20] p-4 transition-colors hover:bg-[#eceee4] sm:p-6 ${index % 2 ? "lg:mt-24" : ""}`}
               >
                 <PaperPreview project={project} index={index} />

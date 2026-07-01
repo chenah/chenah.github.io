@@ -56,8 +56,8 @@ export const hero = {
     en: "Turning frontier AI into useful, trustworthy and human-centered applications.",
   },
   now: {
-    zh: "华南理工大学 · 未来技术学院 · 2027.09",
-    en: "SCUT · SCHOOL OF FUTURE TECHNOLOGY · SEP 2027",
+    zh: "华南理工大学 · 未来技术学院 · 2026.09",
+    en: "SCUT · SCHOOL OF FUTURE TECHNOLOGY · SEP 2026",
   },
 };
 
@@ -165,7 +165,7 @@ export const publications: Publication[] = [
 
 export const experience: ExperienceItem[] = [
   {
-    date: { zh: "2027.09 — 至今", en: "Sep 2027 — Present" },
+    date: { zh: "2026.09 — 至今", en: "Sep 2026 — Present" },
     role: { zh: "智能科学与技术 博士生", en: "PhD Student in Intelligent Science and Technology" },
     org: {
       zh: "华南理工大学 · 未来技术学院",
@@ -173,7 +173,7 @@ export const experience: ExperienceItem[] = [
     },
   },
   {
-    date: { zh: "2024.03 — 2027.08", en: "2024 — 2027" },
+    date: { zh: "2024.03 — 2026.08", en: "2024 — 2026" },
     role: { zh: "科研助理", en: "Research Assistant" },
     org: {
       zh: "香港理工大学 · 设计学院 & 电子计算学系",

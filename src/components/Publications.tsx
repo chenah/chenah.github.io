@@ -24,6 +24,7 @@ export function Publications() {
                 href={pub.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`View paper: ${pub.title}`}
                 className="group grid gap-5 border-b border-[#282c20]/35 py-8 transition-transform duration-300 hover:translate-x-2 md:grid-cols-[180px_1fr_70px] md:py-10"
               >
                 <div className="flex flex-wrap content-start gap-2">
