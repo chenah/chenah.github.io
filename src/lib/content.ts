@@ -23,7 +23,8 @@ export interface Project {
   tags: string[];
   venue: string;
   year: string;
-  visual: "audio" | "network" | "avatar" | "coding";
+  /** Real figure extracted from the paper (lives in /public/figures). */
+  figure: string;
   link: string;
 }
 
@@ -173,7 +174,7 @@ export const projects: Project[] = [
     tags: ["Agentic AI", "UX Research", "RCT"],
     venue: "CHI",
     year: "2026",
-    visual: "audio",
+    figure: "/figures/audio.jpg",
     link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:UeHWp8X0CEIC`,
   },
   {
@@ -182,7 +183,7 @@ export const projects: Project[] = [
     tags: ["AI in Education", "Human-AI Interaction", "RCT"],
     venue: "arXiv",
     year: "2025",
-    visual: "network",
+    figure: "/figures/network.png",
     link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:2osOgNQ5qMEC`,
   },
   {
@@ -191,7 +192,7 @@ export const projects: Project[] = [
     tags: ["Virtual Reality", "Eye Tracking", "Social HCI"],
     venue: "CHB",
     year: "2025",
-    visual: "avatar",
+    figure: "/figures/avatar.jpg",
     link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:u-x6o8ySG0sC`,
   },
   {
@@ -200,7 +201,7 @@ export const projects: Project[] = [
     tags: ["LLM", "Qualitative Coding", "EdTech"],
     venue: "BESC",
     year: "2025",
-    visual: "coding",
+    figure: "/figures/coding.png",
     link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:IjCSPb-OGe4C`,
   },
 ];
