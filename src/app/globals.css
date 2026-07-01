@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-lime: var(--lime);
+
+  --font-sans: var(--font-grotesk), -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-display: var(--font-anton), "PingFang SC", "Microsoft YaHei", sans-serif;
+
+  --radius-lg: 1rem;
+}
+
+:root {
+  --font-anton: "Anton";
+  --font-grotesk: "Space Grotesk";
+  --background: #f4f4ed;
+  --foreground: #282c20;
+  --primary: #d2ff00;
+  --primary-foreground: #20241b;
+  --muted: #e8e9df;
+  --muted-foreground: #63675b;
+  --card: #ecece4;
+  --card-2: #282c20;
+  --border: rgba(40, 44, 32, 0.18);
+  --border-strong: rgba(40, 44, 32, 0.42);
+  --lime: #d2ff00;
+  --cream: #f4f4ed;
+  --olive: #282c20;
+  --olive-soft: #34392c;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    overflow-x: hidden;
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+  ::selection {
+    background: var(--lime);
+    color: var(--olive);
+  }
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Hide scrollbar for a cleaner immersive feel */
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+body {
+  scrollbar-width: none;
+}
+
+/* Kinetic type: mask-reveal line */
+.mask-line {
+  overflow: hidden;
+  display: block;
+}
+
+.font-editorial {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: -0.055em;
+}
+
+.contour-bg {
+  background-image:
+    repeating-radial-gradient(ellipse at 18% 15%, transparent 0 66px, rgba(40, 44, 32, 0.09) 67px 68px, transparent 69px 116px),
+    repeating-radial-gradient(ellipse at 84% 78%, transparent 0 92px, rgba(40, 44, 32, 0.07) 93px 94px, transparent 95px 152px);
+}
+
+.contour-bg-dark {
+  background-image:
+    repeating-radial-gradient(ellipse at 15% 20%, transparent 0 82px, rgba(210, 255, 0, 0.08) 83px 84px, transparent 85px 150px),
+    repeating-radial-gradient(ellipse at 80% 75%, transparent 0 110px, rgba(210, 255, 0, 0.055) 111px 112px, transparent 113px 180px);
+}
+
+.olive-section {
+  background: var(--olive);
+  color: var(--cream);
+  --muted-foreground: #b9bcae;
+  --border: rgba(244, 244, 237, 0.2);
+  --border-strong: rgba(244, 244, 237, 0.4);
+}
+
+/* Marquee */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee-x 26s linear infinite;
+  will-change: transform;
+}
+
+/* Spotlight card follows the cursor */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    460px circle at var(--mx, -100px) var(--my, -100px),
+    rgba(206, 255, 26, 0.1),
+    transparent 42%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto !important;
+  }
+}
