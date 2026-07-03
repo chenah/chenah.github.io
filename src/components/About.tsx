@@ -1,7 +1,7 @@
 "use client";
 
 import { about } from "@/lib/content";
-import { Reveal, ClipReveal } from "@/components/motion-primitives";
+import { Reveal, ClipReveal, CountUp } from "@/components/motion-primitives";
 
 export function About() {
   return (
@@ -19,14 +19,16 @@ export function About() {
         <div className="mt-[clamp(48px,7vw,100px)] grid gap-14 border-t border-white/20 pt-10 lg:grid-cols-[1.4fr_1fr]">
           <Reveal>
             <p className="max-w-3xl text-[clamp(1.15rem,2.2vw,2rem)] leading-[1.35] text-[#d8dacd]">
-              I am a PhD student in Intelligent Science and Technology at SCUT's School of Future Technology. My work connects AI capabilities with real user needs and deployable interactive systems, spanning agentic AI, human-centered AI, education and virtual reality.
+              I am a PhD student in Intelligent Science and Technology at SCUT&apos;s School of Future Technology. My work connects AI capabilities with real user needs and deployable interactive systems, spanning agentic AI, human-centered AI, education and virtual reality.
             </p>
           </Reveal>
           <div className="grid grid-cols-3 gap-3">
             {about.stats.map((stat, index) => (
               <Reveal key={stat.num} delay={index * 0.08}>
                 <div className="border-t border-white/25 pt-4">
-                  <span className="block font-display text-[clamp(2.2rem,5vw,5rem)] leading-none text-lime">{stat.num}</span>
+                  <span className="block font-display text-[clamp(2.2rem,5vw,5rem)] leading-none text-lime">
+                    <CountUp to={Number(stat.num)} delay={0.2 + index * 0.12} />
+                  </span>
                   <span className="mt-2 block text-[0.68rem] uppercase tracking-[0.12em] text-[#b9bcae]">{stat.label}</span>
                 </div>
               </Reveal>
@@ -35,7 +37,11 @@ export function About() {
         </div>
 
         <div className="mt-14 flex flex-wrap gap-2">
-          {about.skills.map((skill) => <span key={skill} className="rounded-full border border-white/25 px-4 py-2 text-xs uppercase tracking-[0.08em] transition-colors hover:border-lime hover:bg-lime hover:text-[#282c20]">{skill}</span>)}
+          {about.skills.map((skill, index) => (
+            <Reveal key={skill} delay={index * 0.05} y={14}>
+              <span className="inline-block rounded-full border border-white/25 px-4 py-2 text-xs uppercase tracking-[0.08em] transition-[background-color,border-color,color,transform] duration-300 hover:-translate-y-1 hover:border-lime hover:bg-lime hover:text-[#282c20]">{skill}</span>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

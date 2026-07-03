@@ -1,8 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+  type Variants,
+} from "motion/react";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -180,5 +188,219 @@ export function Magnetic({
     >
       {children}
     </motion.div>
+  );
+}
+
+/**
+ * Per-character kinetic reveal: each letter rises out of a per-word clip mask
+ * with a slight un-rotate, staggered across the whole string. The heavyweight
+ * version of MaskReveal, reserved for display-size headlines.
+ */
+export function CharReveal({
+  text,
+  className,
+  delay = 0,
+  stagger = 0.03,
+  mount = false,
+}: {
+  text: string;
+  className?: string;
+  delay?: number;
+  stagger?: number;
+  mount?: boolean;
+}) {
+  const words = text.split(" ");
+  let charIndex = 0;
+  // The OBSERVED element is this outer, untransformed wrapper — the chars
+  // themselves start fully clipped inside their word masks, so an observer on
+  // them would never fire (same trap documented on ClipReveal). Variants
+  // propagate down; per-char stagger comes from the dynamic variant.
+  const charVariants: Variants = {
+    hidden: { y: "115%", rotate: 10 },
+    shown: (i: number) => ({
+      y: "0%",
+      rotate: 0,
+      transition: { duration: 0.8, ease: EASE, delay: delay + i * stagger },
+    }),
+  };
+  return (
+    <motion.span
+      className={className}
+      style={{ display: "inline-block" }}
+      initial="hidden"
+      {...(mount
+        ? { animate: "shown" }
+        : {
+            whileInView: "shown",
+            viewport: { once: true, margin: "0px 0px -10% 0px" },
+          })}
+    >
+      {words.map((word, wi) => (
+        <span
+          key={wi}
+          style={{
+            display: "inline-block",
+            overflow: "hidden",
+            verticalAlign: "bottom",
+            // keep descenders / rotated glyphs from clipping at rest
+            paddingBottom: "0.1em",
+            marginBottom: "-0.1em",
+          }}
+        >
+          {word.split("").map((ch, ci) => {
+            const i = charIndex++;
+            return (
+              <motion.span
+                key={ci}
+                custom={i}
+                variants={charVariants}
+                style={{
+                  display: "inline-block",
+                  willChange: "transform",
+                  transformOrigin: "0% 100%",
+                }}
+              >
+                {ch}
+              </motion.span>
+            );
+          })}
+          {wi < words.length - 1 ? " " : ""}
+        </span>
+      ))}
+    </motion.span>
+  );
+}
+
+/** Count a number up from 0 when it scrolls into view (ease-out cubic). */
+export function CountUp({
+  to,
+  className,
+  duration = 1.5,
+  delay = 0,
+}: {
+  to: number;
+  className?: string;
+  duration?: number;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    let raf = 0;
+    const start = performance.now() + delay * 1000;
+    const tick = (now: number) => {
+      const p = Math.min(1, Math.max(0, (now - start) / (duration * 1000)));
+      setValue(Math.round((1 - Math.pow(1 - p, 3)) * to));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, to, duration, delay]);
+
+  return (
+    <span ref={ref} className={className}>
+      {value}
+    </span>
+  );
+}
+
+/**
+ * Scroll-linked parallax: drifts children vertically as the element crosses
+ * the viewport. speed > 0 lags the scroll, speed < 0 moves against it.
+ */
+export function Parallax({
+  children,
+  speed = 0.2,
+  className,
+}: {
+  children: ReactNode;
+  speed?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [speed * -120, speed * 120]);
+  return (
+    <motion.div ref={ref} style={{ y }} className={className}>
+      {children}
+    </motion.div>
+  );
+}
+
+/** 3D perspective tilt that follows the cursor across the element. */
+export function Tilt({
+  children,
+  max = 6,
+  className,
+}: {
+  children: ReactNode;
+  max?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const rx = useMotionValue(0);
+  const ry = useMotionValue(0);
+  const srx = useSpring(rx, { stiffness: 160, damping: 18, mass: 0.6 });
+  const sry = useSpring(ry, { stiffness: 160, damping: 18, mass: 0.6 });
+
+  function onMove(e: React.MouseEvent<HTMLDivElement>) {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    ry.set(px * 2 * max);
+    rx.set(-py * 2 * max);
+  }
+  function reset() {
+    rx.set(0);
+    ry.set(0);
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={reset}
+      style={{
+        rotateX: srx,
+        rotateY: sry,
+        transformPerspective: 1000,
+        transformStyle: "preserve-3d",
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/**
+ * Rolling hover text: two stacked copies inside a clip; hovering any ancestor
+ * with the `roll-trigger` class (or the element itself) rolls the second copy
+ * up into place.
+ */
+export function RollingText({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}) {
+  return (
+    <span className={`roll ${className ?? ""}`}>
+      <span className="roll-inner">
+        <span className="roll-line">{text}</span>
+        <span className="roll-line" aria-hidden>
+          {text}
+        </span>
+      </span>
+    </span>
   );
 }

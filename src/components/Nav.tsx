@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useLenis } from "lenis/react";
 import { brand, navItems } from "@/lib/content";
+import { RollingText } from "@/components/motion-primitives";
 
 export function Nav() {
   const lenis = useLenis();
@@ -42,9 +43,9 @@ export function Nav() {
               key={item.id}
               href={`#${item.id}`}
               onClick={(e) => go(e, item.id)}
-              className={`text-[0.68rem] font-bold uppercase tracking-[0.12em] transition-colors ${active === item.id ? "text-[#282c20]" : "text-[#282c20]/45 hover:text-[#282c20]"}`}
+              className={`roll-trigger text-[0.68rem] font-bold uppercase tracking-[0.12em] transition-colors ${active === item.id ? "text-[#282c20]" : "text-[#282c20]/45 hover:text-[#282c20]"}`}
             >
-              {item.label}
+              <RollingText text={item.label} />
             </a>
           ))}
         </nav>
@@ -61,11 +62,26 @@ export function Nav() {
       </div>
 
       <div className={`pointer-events-auto fixed inset-0 -z-1 flex flex-col justify-center bg-[#282c20] px-6 text-[#f4f4ed] transition-[clip-path] duration-700 sm:px-12 ${open ? "[clip-path:circle(230%_at_96%_4%)]" : "[clip-path:circle(0%_at_96%_4%)]"}`}>
-        <span className="mb-8 text-xs font-bold uppercase tracking-[0.25em] text-lime">Navigate</span>
+        <span
+          style={{ transitionDelay: open ? "250ms" : "0ms" }}
+          className={`mb-8 text-xs font-bold uppercase tracking-[0.25em] text-lime transition-[opacity,transform] duration-500 ${open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
+        >
+          Navigate
+        </span>
         {navItems.map((item, index) => (
-          <a key={item.id} href={`#${item.id}`} onClick={(e) => go(e, item.id)} className="group flex items-baseline gap-5 border-t border-white/15 py-3 last:border-b">
-            <span className="text-xs text-lime">0{index + 1}</span>
-            <span className="font-display text-[clamp(2.8rem,8vw,7rem)] uppercase leading-none transition-transform group-hover:translate-x-4">{item.label}</span>
+          <a key={item.id} href={`#${item.id}`} onClick={(e) => go(e, item.id)} className="group flex items-baseline gap-5 overflow-hidden border-t border-white/15 py-3 last:border-b">
+            <span
+              style={{ transitionDelay: open ? `${320 + index * 70}ms` : "0ms" }}
+              className={`text-xs text-lime transition-[opacity,transform] duration-500 ${open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
+            >
+              0{index + 1}
+            </span>
+            <span
+              style={{ transitionDelay: open ? `${300 + index * 70}ms` : "0ms" }}
+              className={`font-display text-[clamp(2.8rem,8vw,7rem)] uppercase leading-none transition-transform duration-600 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-4 ${open ? "translate-y-0" : "translate-y-full"}`}
+            >
+              {item.label}
+            </span>
           </a>
         ))}
       </div>

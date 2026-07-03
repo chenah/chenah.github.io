@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { projects, type Project } from "@/lib/content";
-import { Reveal, ClipReveal } from "@/components/motion-primitives";
+import { Reveal, ClipReveal, Parallax, Tilt } from "@/components/motion-primitives";
 
 function PaperPreview({ project, index }: { project: Project; index: number }) {
   return (
@@ -14,16 +14,18 @@ function PaperPreview({ project, index }: { project: Project; index: number }) {
         </div>
         <h3 className="max-w-[32ch] text-[clamp(0.8rem,1.35vw,1.2rem)] font-bold leading-tight">{project.title}</h3>
         <div className="absolute inset-x-5 bottom-5 top-[39%] border-t border-[#282c20]/25 pt-4">
-          <div className="relative h-full w-full">
-            <Image
-              src={project.figure}
-              alt={`Figure from “${project.title}”`}
-              fill
-              unoptimized
-              sizes="(max-width: 1024px) 90vw, 640px"
-              className="object-contain"
-            />
-          </div>
+          <Parallax speed={0.08} className="h-full w-full">
+            <div className="relative h-full w-full transition-transform duration-700 ease-out group-hover:scale-105">
+              <Image
+                src={project.figure}
+                alt={`Figure from “${project.title}”`}
+                fill
+                unoptimized
+                sizes="(max-width: 1024px) 90vw, 640px"
+                className="object-contain"
+              />
+            </div>
+          </Parallax>
         </div>
       </div>
       <div className="pointer-events-none absolute inset-0 opacity-[0.08] [background:repeating-linear-gradient(0deg,transparent_0_3px,#fff_4px)]" />
@@ -44,30 +46,39 @@ export function Projects() {
 
         <div className="grid gap-7 lg:grid-cols-2">
           {projects.map((project, index) => (
-            <Reveal key={project.title} delay={(index % 2) * 0.08}>
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`View project: ${project.title}`}
-                className={`group block border border-[#282c20] p-4 transition-colors hover:bg-[#eceee4] sm:p-6 ${index % 2 ? "lg:mt-24" : ""}`}
-              >
-                <PaperPreview project={project} index={index} />
-                <div className="px-1 pb-2 pt-7 sm:px-2">
-                  <div className="mb-5 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="rounded-full border border-[#282c20] px-3 py-1 text-[0.6rem] font-bold uppercase tracking-wide">{tag}</span>
-                    ))}
-                  </div>
-                  <div className="flex items-start justify-between gap-5">
-                    <div>
-                      <h3 className="max-w-[23ch] text-[clamp(1.5rem,2.6vw,2.6rem)] font-semibold leading-[1.08]">{project.title}</h3>
-                      <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#63675b]">{project.desc}</p>
+            <Reveal key={project.title} delay={(index % 2) * 0.08} className={index % 2 ? "lg:mt-24" : ""}>
+              <Tilt max={4} className="relative">
+                <span
+                  aria-hidden
+                  className="text-stroke pointer-events-none absolute -top-[0.55em] right-2 z-10 font-display text-[clamp(4.5rem,8vw,8rem)] leading-none"
+                >
+                  0{index + 1}
+                </span>
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`View project: ${project.title}`}
+                  data-cursor="hover"
+                  className="group block border border-[#282c20] bg-[#f4f4ed] p-4 transition-colors duration-500 hover:bg-[#eceee4] sm:p-6"
+                >
+                  <PaperPreview project={project} index={index} />
+                  <div className="px-1 pb-2 pt-7 sm:px-2">
+                    <div className="mb-5 flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="rounded-full border border-[#282c20] px-3 py-1 text-[0.6rem] font-bold uppercase tracking-wide transition-colors duration-300 group-hover:border-[#282c20] group-hover:bg-lime">{tag}</span>
+                      ))}
                     </div>
-                    <span className="grid size-11 shrink-0 place-items-center rounded-full border border-[#282c20] transition-colors group-hover:bg-[#282c20] group-hover:text-lime">↗</span>
+                    <div className="flex items-start justify-between gap-5">
+                      <div>
+                        <h3 className="max-w-[23ch] text-[clamp(1.5rem,2.6vw,2.6rem)] font-semibold leading-[1.08]">{project.title}</h3>
+                        <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#63675b]">{project.desc}</p>
+                      </div>
+                      <span className="grid size-11 shrink-0 place-items-center rounded-full border border-[#282c20] transition-[background-color,color,transform] duration-500 group-hover:rotate-45 group-hover:bg-[#282c20] group-hover:text-lime">↗</span>
+                    </div>
                   </div>
-                </div>
-              </a>
+                </a>
+              </Tilt>
             </Reveal>
           ))}
         </div>

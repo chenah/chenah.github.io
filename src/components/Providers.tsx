@@ -5,6 +5,7 @@ import { MotionConfig } from "motion/react";
 import { Loader } from "@/components/Loader";
 import { Cursor } from "@/components/Cursor";
 import { Grain } from "@/components/Grain";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -16,6 +17,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <Loader />
         <Grain />
         <Cursor />
+        <ScrollProgress />
         {children}
       </ReactLenis>
     </MotionConfig>

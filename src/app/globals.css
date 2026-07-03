@@ -131,6 +131,76 @@ body {
   --border-strong: rgba(244, 244, 237, 0.4);
 }
 
+/* Rolling hover text: hover rolls a clone line up into place. The clone is
+   absolutely positioned one line below so the container stays one line tall. */
+.roll {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.roll-inner {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+.roll-line {
+  display: block;
+}
+.roll-line + .roll-line {
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+.roll-trigger:hover .roll-inner,
+.roll:hover .roll-inner {
+  transform: translateY(-100%);
+}
+
+/* Outlined display type (ghost numerals, hollow marquee row). */
+.text-stroke {
+  -webkit-text-stroke: 1.5px rgba(40, 44, 32, 0.5);
+  color: transparent;
+}
+.text-stroke-light {
+  -webkit-text-stroke: 1px rgba(244, 244, 237, 0.4);
+  color: transparent;
+}
+
+/* Slow rotation for the circular scroll badge. */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 14s linear infinite;
+  will-change: transform;
+}
+
+/* Lime hairline scroll progress along the top edge. */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 150;
+  height: 3px;
+  background: var(--lime);
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* Underline sweep for inline links. */
+.link-sweep {
+  background-image: linear-gradient(var(--lime), var(--lime));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 2px;
+  transition: background-size 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-sweep:hover {
+  background-size: 100% 2px;
+}
+
 /* Marquee */
 @keyframes marquee-x {
   from {
@@ -204,6 +274,12 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee {
     animation: none;
+  }
+  .animate-spin-slow {
+    animation: none;
+  }
+  .roll-inner {
+    transition: none;
   }
   .grain {
     animation: none;
