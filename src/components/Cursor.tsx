@@ -30,7 +30,7 @@ export function Cursor() {
       window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!capable) return;
 
-    setEnabled(true);
+    const enableTimer = window.setTimeout(() => setEnabled(true), 0);
     document.documentElement.classList.add("cursor-ready");
 
     const move = (e: PointerEvent) => {
@@ -43,12 +43,13 @@ export function Cursor() {
     };
     window.addEventListener("pointermove", move, { passive: true });
     return () => {
+      window.clearTimeout(enableTimer);
       window.removeEventListener("pointermove", move);
       document.documentElement.classList.remove("cursor-ready");
     };
   }, [reduce, x, y]);
 
-  if (!enabled) return null;
+  if (!enabled || reduce) return null;
 
   return (
     <>

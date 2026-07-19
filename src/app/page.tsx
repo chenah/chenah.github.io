@@ -1,5 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
+import { ResearchStory } from "@/components/ResearchStory";
 import { CtaBand } from "@/components/CtaBand";
 import { Publications } from "@/components/Publications";
 import { Experience } from "@/components/Experience";
@@ -13,6 +14,7 @@ export default function Home() {
       <main>
         <Hero />
         <About />
+        <ResearchStory />
         <CtaBand />
         <Publications />
         <Experience />

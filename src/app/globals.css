@@ -269,6 +269,17 @@ body {
   justify-content: center;
   background: var(--olive);
   color: var(--cream);
+  animation: intro-loader-failsafe 0.9s cubic-bezier(0.76, 0, 0.24, 1) 2.4s forwards;
+}
+
+/* If hydration is delayed or blocked, the server-rendered loader must never
+   become a permanent curtain. Normal JS-driven exit finishes before this. */
+@keyframes intro-loader-failsafe {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -286,6 +297,7 @@ body {
   }
   .intro-loader {
     display: none !important;
+    animation: none;
   }
   html {
     scroll-behavior: auto !important;

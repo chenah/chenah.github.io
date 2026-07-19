@@ -22,3 +22,6 @@
 - Project cards move their decorative “data orbit” on hover.
 - At `max-width: 767px`, asymmetric grids collapse, display type scales with `clamp()`, and the hero visual is kept within the viewport.
 - `prefers-reduced-motion` disables continuous motion and smooth scrolling.
+- The hero portrait uses alternating horizontal slices that separate slightly with scroll and crossfade together on hover, focus, or tap.
+- The new research story is scroll-driven: centered cards update a sticky `01/03` progress indicator on desktop and become a simple stacked narrative on mobile.
+- The loader uses elapsed wall-clock time plus a hard deadline so it cannot remain stuck when animation frames are throttled in a background tab.
