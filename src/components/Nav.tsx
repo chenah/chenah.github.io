@@ -1,90 +1,118 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
-import { brand, navItems } from "@/lib/content";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { RollingText } from "@/components/motion-primitives";
+import { useMotionPreferences } from "./Providers";
+import styles from "./MotionShell.module.css";
+
+const links = [
+  { id: "about", label: "About" },
+  { id: "projects", label: "Research" },
+  { id: "publications", label: "Publications" },
+  { id: "experience", label: "Experience" },
+];
 
 export function Nav() {
   const lenis = useLenis();
-  const [active, setActive] = useState("about");
+  const { motionPaused } = useMotionPreferences();
+  const [active, setActive] = useState("");
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const navigatingFromMenu = useRef(false);
 
   useEffect(() => {
-    const sections = navItems.map((n) => document.getElementById(n.id)).filter(Boolean) as HTMLElement[];
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => entry.isIntersecting && setActive(entry.target.id)),
-      { rootMargin: "-44% 0px -50% 0px" },
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(entry.target.id === "top" ? "" : entry.target.id);
+      }),
+      { rootMargin: "-15% 0px -65% 0px", threshold: 0 },
     );
-    sections.forEach((section) => observer.observe(section));
+    ["top", ...links.map((item) => item.id), "contact"].forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
+    });
     return () => observer.disconnect();
   }, []);
 
-  function go(e: React.MouseEvent, id: string) {
-    e.preventDefault();
-    setOpen(false);
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    lenis?.stop();
+    const media = window.matchMedia("(min-width: 900px)");
+    const closeAtDesktop = () => { if (media.matches) dialogRef.current?.close(); };
+    media.addEventListener("change", closeAtDesktop);
+    return () => {
+      document.documentElement.style.overflow = previousOverflow;
+      lenis?.start();
+      media.removeEventListener("change", closeAtDesktop);
+    };
+  }, [open, lenis]);
+
+  function navigate(event: React.MouseEvent<HTMLAnchorElement>, id: string) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
     const target = document.getElementById(id);
     if (!target) return;
-    if (lenis) lenis.scrollTo(target, { offset: -60 });
-    else target.scrollIntoView({ behavior: "smooth" });
+    event.preventDefault();
+    if (dialogRef.current?.open) {
+      navigatingFromMenu.current = true;
+      dialogRef.current.close();
+    }
+    setOpen(false);
+    history.pushState(null, "", `#${id}`);
+    // Closing the modal restores scrolling before the anchor navigation starts.
+    requestAnimationFrame(() => {
+      lenis?.start();
+      if (lenis) lenis.scrollTo(target, { immediate: motionPaused, duration: 1.1 });
+      else target.scrollIntoView({ behavior: motionPaused ? "instant" : "smooth" });
+      const hadTabIndex = target.hasAttribute("tabindex");
+      if (!hadTabIndex) target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+      if (!hadTabIndex) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true });
+    });
   }
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-100 flex items-start justify-between p-4 sm:p-6">
-      <a href="#top" onClick={(e) => go(e, "top")} className="pointer-events-auto rounded-sm bg-[#f4f4ed]/90 px-1.5 py-1 leading-[0.78] text-[#282c20] backdrop-blur-sm">
-        <span className="block font-editorial text-[1.25rem] sm:text-[1.5rem]">{brand.split(" ")[0]}</span>
-        <span className="block font-display text-[1.25rem] uppercase sm:text-[1.5rem]">GUANG</span>
-      </a>
-
-      <div className="pointer-events-auto flex items-center gap-2.5">
-        <nav className="mr-2 hidden items-center gap-5 rounded-full border border-[#282c20]/20 bg-[#f4f4ed]/80 px-5 py-3 backdrop-blur-lg lg:flex">
-          {navItems.slice(0, 4).map((item) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              onClick={(e) => go(e, item.id)}
-              className={`roll-trigger text-[0.68rem] font-bold uppercase tracking-[0.12em] transition-colors ${active === item.id ? "text-[#282c20]" : "text-[#282c20]/45 hover:text-[#282c20]"}`}
-            >
+    <>
+      <header className={styles.header}>
+        <a href="#top" onClick={(event) => navigate(event, "top")} className={styles.brand} aria-label="CHEN Guang, back to top">
+          <span className={styles.monogram}>cg<span>.</span></span>
+          <span className={styles.brandName}>CHEN Guang</span>
+        </a>
+        <nav className={styles.desktopNav} aria-label="Main navigation">
+          {links.map((item) => (
+            <a key={item.id} href={`#${item.id}`} onClick={(event) => navigate(event, item.id)} className={`roll-trigger ${styles.navLink}`} aria-current={active === item.id ? "location" : undefined}>
               <RollingText text={item.label} />
             </a>
           ))}
         </nav>
-        <button
-          onClick={() => setOpen((value) => !value)}
-          className="grid size-11 place-items-center rounded-[11px] border-2 border-[#282c20] bg-[#f4f4ed] text-[#282c20]"
-          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-        >
-          <span className="relative block h-4 w-5">
-            <i className={`absolute left-0 top-1 block h-0.5 w-5 bg-current transition-transform ${open ? "translate-y-1 rotate-45" : ""}`} />
-            <i className={`absolute bottom-1 left-1 block h-0.5 w-4 bg-current transition-transform ${open ? "-translate-x-1 -translate-y-1 -rotate-45" : ""}`} />
-          </span>
+        <a href="#contact" onClick={(event) => navigate(event, "contact")} className={styles.contactLink}>Let’s talk <ArrowUpRight size={15} aria-hidden="true" /></a>
+        <button ref={triggerRef} className={styles.menuButton} type="button" aria-label="Open navigation menu" aria-expanded={open} aria-controls="mobile-navigation" onClick={() => { dialogRef.current?.showModal(); setOpen(true); }}>
+          <Menu size={21} aria-hidden="true" />
         </button>
-      </div>
+      </header>
 
-      <div className={`pointer-events-auto fixed inset-0 -z-1 flex flex-col justify-center bg-[#282c20] px-6 text-[#f4f4ed] transition-[clip-path] duration-700 sm:px-12 ${open ? "[clip-path:circle(230%_at_96%_4%)]" : "[clip-path:circle(0%_at_96%_4%)]"}`}>
-        <span
-          style={{ transitionDelay: open ? "250ms" : "0ms" }}
-          className={`mb-8 text-xs font-bold uppercase tracking-[0.25em] text-lime transition-[opacity,transform] duration-500 ${open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
-        >
-          Navigate
-        </span>
-        {navItems.map((item, index) => (
-          <a key={item.id} href={`#${item.id}`} onClick={(e) => go(e, item.id)} className="group flex items-baseline gap-5 overflow-hidden border-t border-white/15 py-3 last:border-b">
-            <span
-              style={{ transitionDelay: open ? `${320 + index * 70}ms` : "0ms" }}
-              className={`text-xs text-lime transition-[opacity,transform] duration-500 ${open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
-            >
-              0{index + 1}
-            </span>
-            <span
-              style={{ transitionDelay: open ? `${300 + index * 70}ms` : "0ms" }}
-              className={`font-display text-[clamp(2.8rem,8vw,7rem)] uppercase leading-none transition-transform duration-600 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-4 ${open ? "translate-y-0" : "translate-y-full"}`}
-            >
-              {item.label}
-            </span>
-          </a>
-        ))}
-      </div>
-    </header>
+      <dialog ref={dialogRef} id="mobile-navigation" className={styles.mobileDialog} aria-labelledby="navigation-title" onClose={() => {
+        setOpen(false);
+        if (!navigatingFromMenu.current) triggerRef.current?.focus();
+        navigatingFromMenu.current = false;
+      }}>
+        <div className={styles.dialogHeader}>
+          <span id="navigation-title" className={styles.dialogEyebrow}>Explore the portfolio</span>
+          <button type="button" className={styles.closeButton} aria-label="Close navigation menu" onClick={() => dialogRef.current?.close()}><X size={24} aria-hidden="true" /></button>
+        </div>
+        <nav className={styles.mobileNav} aria-label="Mobile navigation">
+          {[...links, { id: "contact", label: "Let’s talk" }].map((item, index) => (
+            <a key={item.id} href={`#${item.id}`} onClick={(event) => navigate(event, item.id)} aria-current={active === item.id ? "location" : undefined} style={{ "--item-index": index } as React.CSSProperties}>
+              <span className={styles.mobileIndex}>0{index + 1}</span><span>{item.label}</span><ArrowUpRight aria-hidden="true" />
+            </a>
+          ))}
+        </nav>
+        <div className={styles.dialogFooter}><span>CHEN GUANG</span><span>Intelligence. With intention.</span></div>
+      </dialog>
+    </>
   );
 }

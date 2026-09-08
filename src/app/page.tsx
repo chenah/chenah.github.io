@@ -1,25 +1,21 @@
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { ResearchStory } from "@/components/ResearchStory";
-import { CtaBand } from "@/components/CtaBand";
 import { Publications } from "@/components/Publications";
 import { Experience } from "@/components/Experience";
 import { Projects } from "@/components/Projects";
-import { Marquee } from "@/components/Marquee";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
     <>
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <Hero />
         <About />
         <ResearchStory />
-        <CtaBand />
+        <Projects />
         <Publications />
         <Experience />
-        <Projects />
-        <Marquee />
       </main>
       <Footer />
     </>

@@ -10,7 +10,7 @@ import { Providers } from "@/components/Providers";
 import { Nav } from "@/components/Nav";
 
 export const metadata: Metadata = {
-  title: "CHEN Guang | AI Applications PhD",
+  title: "CHEN Guang — Human-Centered AI & Interactive Systems",
   description: "CHEN Guang, PhD student in Intelligent Science and Technology at SCUT School of Future Technology. Research in AI applications, HCI, and intelligent education.",
   icons: { icon: "/icon.svg" },
 };
@@ -19,6 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className="font-sans antialiased">
       <body>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <Providers>
           <Nav />
           {children}

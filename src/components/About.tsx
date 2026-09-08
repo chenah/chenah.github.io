@@ -1,47 +1,47 @@
 "use client";
 
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { about } from "@/lib/content";
 import { Reveal, ClipReveal, CountUp } from "@/components/motion-primitives";
+import styles from "./ResearchSections.module.css";
 
 export function About() {
   return (
-    <section id="about" className="olive-section contour-bg-dark scroll-mt-16 px-5 py-[clamp(90px,14vw,190px)] sm:px-8 lg:px-16">
-      <div className="mx-auto max-w-[1440px]">
+    <section id="about" aria-labelledby="about-title" className={`${styles.section} ${styles.about}`}>
+      <div className={styles.container}>
         <Reveal>
-          <p className="mb-10 text-center text-[0.65rem] font-bold uppercase tracking-[0.25em] text-lime">01 / Manifesto</p>
+          <div className={styles.sectionLabel}>
+            <span>01 / A little context</span>
+            <span className={styles.labelNote}>The person behind the research</span>
+          </div>
         </Reveal>
-        <h2 className="mx-auto max-w-[1220px] text-center font-display text-[clamp(3rem,8.4vw,8.5rem)] uppercase leading-[0.86] tracking-[-0.035em]">
-          <ClipReveal block delay={0.05}>
-            Turning AI <span className="font-editorial italic text-lime">possibility</span><br />into real-world<br /><span className="font-editorial italic text-lime">applications.</span>
-          </ClipReveal>
-        </h2>
-
-        <div className="mt-[clamp(48px,7vw,100px)] grid gap-14 border-t border-white/20 pt-10 lg:grid-cols-[1.4fr_1fr]">
-          <Reveal>
-            <p className="max-w-3xl text-[clamp(1.15rem,2.2vw,2rem)] leading-[1.35] text-[#d8dacd]">
-              I am a PhD student in Intelligent Science and Technology at SCUT&apos;s School of Future Technology. My work connects AI capabilities with real user needs and deployable interactive systems, spanning agentic AI, human-centered AI, education and virtual reality.
-            </p>
+        <div className={styles.manifestoGrid}>
+          <h2 id="about-title" className={styles.manifesto}>
+            <ClipReveal block>Turning AI</ClipReveal>
+            <ClipReveal block delay={0.08}><em>possibility</em> into</ClipReveal>
+            <ClipReveal block delay={0.16}>real-world</ClipReveal>
+            <ClipReveal block delay={0.24}>applications<span>.</span></ClipReveal>
+          </h2>
+          <Reveal delay={0.2} className={styles.aboutAside}>
+            <ArrowDownRight className={styles.manifestoArrow} aria-hidden="true" strokeWidth={1} />
+            <p className={styles.aboutCopy}>I am a PhD student in Intelligent Science and Technology at SCUT&apos;s School of Future Technology.</p>
+            <p className={styles.aboutDetail}>My work connects AI capabilities with real user needs and deployable interactive systems, spanning agentic AI, human-centered AI, education and virtual reality.</p>
+            <a href="#experience" className={styles.textLink}>Explore my journey <ArrowUpRight size={16} aria-hidden="true" /></a>
           </Reveal>
-          <div className="grid grid-cols-3 gap-3">
+        </div>
+        <div className={styles.aboutBottom}>
+          <Reveal className={styles.expertise}>
+            <p className={styles.eyebrow}>Working at the intersection of</p>
+            <ul className={styles.skills} aria-label="Research expertise">{about.skills.map((skill) => <li key={skill}>{skill}</li>)}</ul>
+          </Reveal>
+          <div className={styles.stats}>
             {about.stats.map((stat, index) => (
-              <Reveal key={stat.num} delay={index * 0.08}>
-                <div className="border-t border-white/25 pt-4">
-                  <span className="block font-display text-[clamp(2.2rem,5vw,5rem)] leading-none text-lime">
-                    <CountUp to={Number(stat.num)} delay={0.2 + index * 0.12} />
-                  </span>
-                  <span className="mt-2 block text-[0.68rem] uppercase tracking-[0.12em] text-[#b9bcae]">{stat.label}</span>
-                </div>
+              <Reveal key={stat.label} delay={index * 0.1} className={styles.stat}>
+                <span className={styles.statNumber}><CountUp to={Number(stat.num)} delay={0.1 + index * 0.12} /><span aria-hidden="true">↗</span></span>
+                <span className={styles.statLabel}>{stat.label}</span>
               </Reveal>
             ))}
           </div>
-        </div>
-
-        <div className="mt-14 flex flex-wrap gap-2">
-          {about.skills.map((skill, index) => (
-            <Reveal key={skill} delay={index * 0.05} y={14}>
-              <span className="inline-block rounded-full border border-white/25 px-4 py-2 text-xs uppercase tracking-[0.08em] transition-[background-color,border-color,color,transform] duration-300 hover:-translate-y-1 hover:border-lime hover:bg-lime hover:text-[#282c20]">{skill}</span>
-            </Reveal>
-          ))}
         </div>
       </div>
     </section>

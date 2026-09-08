@@ -1,65 +1,36 @@
-# CHEN Guang — Personal Homepage / 个人主页
+# CHEN Guang — Personal Homepage
 
-陈光 (CHEN Guang) 的个人主页。深色 × 荧光青柠、巨型字体、全幅纵向滚动，
-带平滑滚动 (Lenis)、加载入场、滚动揭示、视差与磁性交互等动效，灵感源自现代
-运动员/创作者官网风格。
+陈光的 AI 与人机交互研究主页。深炭色、暖白排版和荧光橙构成统一视觉系统，保留论文、项目、学术经历及联系方式。
 
-A personal homepage for AI applications researcher CHEN Guang — a black × neon-lime,
-big-type, full-bleed scrolling site with smooth scrolling (Lenis), load
-intro, scroll reveals, parallax and magnetic interactions.
+## 交互设计
 
-## 技术栈 / Tech Stack
+- 首屏 Canvas 粒子雕塑，支持鼠标旋转与 Orbit / Sphere 形态切换。
+- 分层文字入场、滚动揭示、磁性按钮和轻量透视悬停。
+- 可用键盘切换的研究流程、可放大的原始论文图片、按年份筛选的论文索引。
+- 响应式导航、学术时间轴和直接连接邮件、Google Scholar、GitHub 的联系区域。
+- 全局动效暂停按钮，遵循系统 `prefers-reduced-motion`；离开视口或后台时暂停粒子渲染。
 
-- **Next.js 16** (App Router) + **React 19** + **TypeScript**
-- **Tailwind CSS v4**
-- **motion** (Framer Motion) — 入场 / 视差 / 磁性动效
-- **lenis** — 惯性平滑滚动
-- 输出为**静态站点** (`output: "export"`)，可直接托管到 GitHub Pages
+## 开发
 
-## 本地开发 / Local Development
+Node.js 24+，Next.js 16、React 19、TypeScript、Tailwind CSS 4、Motion 与 Lenis。
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
-```
-
-其他脚本 / Other scripts:
-
-```bash
-npm run build      # 生产构建 + 静态导出到 out/
-npm run typecheck  # tsc --noEmit
+npm run dev
 npm run lint
+npm run typecheck
+npm run build
 ```
 
-## 修改内容 / Editing Content
+`npm run dev` 默认启动在 http://localhost:3000。生产构建静态导出至 `out/`，沿用仓库的 GitHub Pages 发布流程。
 
-所有文案（中英双语）集中在一个数据源里，改这里即可全站同步：
+## 内容和样式
 
-- **`src/lib/content.ts`** — 姓名、简介、论文、经历、项目、联系方式等
-- `src/app/globals.css` — 配色（`--lime` 主色）与字体变量
-- `src/components/*` — 各区块组件（Hero / About / Publications / …）
+- `src/lib/content.ts`：个人信息、原有 Scholar 数据快照、论文、项目、经历和联系方式。引用数量不会自动更新。
+- `src/components/Hero.tsx` / `NeuralField.tsx`：首屏和实时粒子。
+- `src/components/Providers.tsx` / `motion-primitives.tsx`：共享动效偏好和交互基础组件。
+- `src/components/*.module.css`：各区域的响应式样式。
+- `src/app/globals.css`：字体、全局配色、可访问性及动效降级。
+- `public/figures/`：项目所使用的原始论文图片。
 
-## 部署到 GitHub Pages / Deploy
-
-`next build` 会在 `out/` 生成纯静态文件。`.github/workflows/deploy.yml` 已配置好：
-每次 push 到 `main` 分支时自动构建并发布到 GitHub Pages（免费）。
-
-**首次启用只需两步（在 GitHub 网页操作，一次性）：**
-
-1. 仓库改名为 `<你的用户名>.github.io`（Settings → 顶部 Rename），
-   这样站点会发布在根域名 `https://<用户名>.github.io/`。
-   如果保留原仓库名，会发布在 `https://<用户名>.github.io/<仓库名>/`，
-   此时需要在 `next.config.ts` 里加回 `basePath`/`assetPrefix`。
-2. 仓库 Settings → Pages → **Build and deployment → Source** 选择
-   **"GitHub Actions"**（不是 "Deploy from a branch"）。
-
-设置好之后，以后每次 `git push` 到 `main` 都会自动重新构建部署，无需手动操作。
-也可以在仓库的 Actions 标签页手动触发 "Deploy to GitHub Pages" 工作流。
-
-若之后购买了自定义域名，在 `public/CNAME` 文件里写入域名（如 `example.com`），
-并同步更新 `public/robots.txt` / `public/sitemap.xml` 里的域名。
-
-## 备注 / Notes
-
-- `legacy/` 保留了迁移前的纯静态 HTML/CSS 版本（`index.html` / `style.css`）。
-- `.claude/skills/clone-website/` 保留了 “克隆网站” 技能，供后续参考使用。
+本次设计在现有仓库中完成；只有执行推送并触发部署流程后，线上 GitHub Pages 才会更新。

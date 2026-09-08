@@ -1,54 +1,79 @@
 "use client";
 
-import { publications } from "@/lib/content";
+import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { contact, publications } from "@/lib/content";
 import { Reveal, ClipReveal } from "@/components/motion-primitives";
+import { useMotionPreferences } from "@/components/Providers";
+import styles from "./EditorialSections.module.css";
+
+const getYear = (badge: string) => badge.match(/\b20\d{2}\b/)?.[0] ?? "";
+const records = [...publications].sort((a, b) =>
+  getYear(b.badges[0].text).localeCompare(getYear(a.badges[0].text)),
+);
+const years = ["All", ...new Set(records.map((paper) => getYear(paper.badges[0].text)))];
 
 export function Publications() {
-  return (
-    <section id="publications" className="scroll-mt-16 bg-[#f4f4ed] px-5 py-[clamp(90px,13vw,170px)] text-[#282c20] sm:px-8 lg:px-16">
-      <div className="mx-auto max-w-[1440px]">
-        <div className="mb-12 flex items-end justify-between border-b border-[#282c20] pb-5">
-          <div>
-            <span className="mb-4 block text-[0.65rem] font-bold uppercase tracking-[0.22em]">02 / Research archive</span>
-            <h2 className="font-display text-[clamp(3.8rem,9vw,9rem)] uppercase leading-[0.78]"><ClipReveal>PUBLICATIONS</ClipReveal></h2>
-          </div>
-          <span className="hidden font-editorial text-3xl italic sm:block">Google Scholar / 06</span>
-        </div>
+  const [year, setYear] = useState("All");
+  const { motionPaused: reducedMotion } = useMotionPreferences();
+  const visible = records.filter((paper) => year === "All" || getYear(paper.badges[0].text) === year);
 
-        <div>
-          {publications.map((pub, index) => (
-            <Reveal key={pub.title} delay={index * 0.06}>
-              <a
-                href={pub.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`View paper: ${pub.title}`}
-                data-cursor="hover"
-                className="group relative grid gap-5 overflow-hidden border-b border-[#282c20]/35 py-8 md:grid-cols-[180px_1fr_70px] md:py-10"
-              >
-                <span
-                  aria-hidden
-                  className="absolute inset-0 origin-bottom scale-y-0 bg-lime transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-y-100"
-                />
-                <span
-                  aria-hidden
-                  className="text-stroke pointer-events-none absolute right-16 top-1/2 hidden -translate-y-1/2 font-display text-[clamp(4rem,7vw,7rem)] leading-none opacity-0 transition-opacity duration-500 group-hover:opacity-70 lg:block"
-                >
-                  0{index + 1}
-                </span>
-                <div className="relative flex flex-wrap content-start gap-2 transition-transform duration-500 group-hover:translate-x-1">
-                  {pub.badges.map((badge) => (
-                    <span key={badge.text} className={`rounded-full border border-[#282c20] px-3 py-1 text-[0.65rem] font-bold uppercase ${badge.highlight ? "bg-lime transition-colors duration-500 group-hover:bg-[#282c20] group-hover:text-lime" : ""}`}>{badge.text}</span>
-                  ))}
-                </div>
-                <div className="relative transition-transform duration-500 group-hover:translate-x-2">
-                  <h3 className="max-w-4xl text-[clamp(1.15rem,2.1vw,2rem)] font-semibold leading-[1.25]">{pub.title}</h3>
-                  <p className="mt-4 text-sm text-[#63675b] transition-colors duration-500 group-hover:text-[#3d4234]">{pub.authors.map((author, i) => author.bold ? <b key={i} className="text-[#282c20]">{author.t}</b> : <span key={i}>{author.t}</span>)}</p>
-                </div>
-                <span className="relative grid size-12 place-items-center rounded-full border border-[#282c20] font-editorial text-lg transition-[background-color,color,transform] duration-500 group-hover:rotate-45 group-hover:bg-[#282c20] group-hover:text-lime">↗</span>
-              </a>
-            </Reveal>
-          ))}
+  return (
+    <section id="publications" className={styles.section} aria-labelledby="publications-heading">
+      <div className={styles.container}>
+        <Reveal className={styles.sectionMeta}>
+          <span>04 / Publications</span>
+          <span>Research archive <span className={styles.metaDot}>●</span> 2024—2026</span>
+        </Reveal>
+        <div className={styles.archiveHeading}>
+          <h2 id="publications-heading" className={styles.heading}>
+            <ClipReveal block>Research,<br /><em>on record.</em></ClipReveal>
+          </h2>
+          <Reveal delay={0.1} className={styles.archiveIntro}>
+            <span className={styles.archiveCount}>{String(publications.length).padStart(2, "0")}<span> / Papers</span></span>
+            <p>Exploring how people work, learn, and connect with intelligent systems.</p>
+            <ArrowDown aria-hidden="true" size={24} strokeWidth={1.25} />
+          </Reveal>
+        </div>
+        <Reveal className={styles.archiveToolbar}>
+          <div className={styles.filters} role="group" aria-label="Filter publications by year">
+            {years.map((option) => (
+              <button key={option} type="button" onClick={() => setYear(option)} aria-pressed={year === option} className={`${styles.filter} ${year === option ? styles.activeFilter : ""}`}>
+                {option === "All" ? "All work" : option}
+                <sup>{option === "All" ? records.length : records.filter((paper) => getYear(paper.badges[0].text) === option).length}</sup>
+              </button>
+            ))}
+          </div>
+          <span className={styles.archiveLabel}>Selected publications / Index</span>
+        </Reveal>
+        <div className={styles.paperList}>
+          <AnimatePresence initial={false} mode="popLayout">
+            {visible.map((paper) => {
+              const index = records.indexOf(paper);
+              const paperYear = getYear(paper.badges[0].text);
+              return (
+                <motion.article key={paper.title} layout={!reducedMotion} initial={{ opacity: 0, y: reducedMotion ? 0 : 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reducedMotion ? 0 : -10 }} transition={{ duration: reducedMotion ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}>
+                  <a className={styles.paper} href={paper.link ?? contact.scholar} target="_blank" rel="noopener noreferrer" aria-label={`Read paper: ${paper.title} (opens in a new tab)`}>
+                    <span className={styles.paperNumber}>{String(index + 1).padStart(2, "0")}</span>
+                    <div className={styles.paperContent}>
+                      <div className={styles.paperBadges}>
+                        <span className={styles.venue}>{paper.badges[0].text.replace(paperYear, "").trim()}</span>
+                        {paper.badges.slice(1).map((badge) => <span key={badge.text} className={styles.paperBadge}>{badge.text}</span>)}
+                      </div>
+                      <h3>{paper.title}</h3>
+                      <p className={styles.authors}>{paper.authors.map((author, i) => author.bold ? <b key={i}>{author.t}</b> : <span key={i}>{author.t}</span>)}</p>
+                    </div>
+                    <div className={styles.paperEnd}><span>{paperYear}</span><span className={styles.paperArrow}><ArrowUpRight aria-hidden="true" size={22} strokeWidth={1.5} /></span></div>
+                  </a>
+                </motion.article>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+        <div className={styles.archiveBottom}>
+          <span role="status" aria-live="polite">Showing {visible.length} of {publications.length} publications</span>
+          <a href={contact.scholar} target="_blank" rel="noopener noreferrer" className={styles.textLink}>View Google Scholar <ArrowUpRight aria-hidden="true" size={16} /></a>
         </div>
       </div>
     </section>

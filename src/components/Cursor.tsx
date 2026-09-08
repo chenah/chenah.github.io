@@ -1,66 +1,56 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useReducedMotion,
-} from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { useMotionPreferences } from "./Providers";
+import styles from "./MotionShell.module.css";
 
-/**
- * A minimal custom cursor: a precise dot that tracks the pointer 1:1 and a
- * softer ring that trails it with spring physics, growing over interactive
- * elements. Only enabled on fine-pointer, hover-capable, motion-OK devices;
- * everywhere else the native cursor is left untouched.
- */
+/** A quiet pointer halo that leaves the native system cursor intact. */
 export function Cursor() {
-  const reduce = useReducedMotion();
-  const [enabled, setEnabled] = useState(false);
+  const { motionPaused } = useMotionPreferences();
+  const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
-
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
-  const ringX = useSpring(x, { stiffness: 320, damping: 28, mass: 0.5 });
-  const ringY = useSpring(y, { stiffness: 320, damping: 28, mass: 0.5 });
+  const ringX = useSpring(x, { stiffness: 220, damping: 26, mass: 0.4 });
+  const ringY = useSpring(y, { stiffness: 220, damping: 26, mass: 0.4 });
 
   useEffect(() => {
-    if (reduce) return;
-    const capable =
-      window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!capable) return;
-
-    const enableTimer = window.setTimeout(() => setEnabled(true), 0);
-    document.documentElement.classList.add("cursor-ready");
-
-    const move = (e: PointerEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
-      const el = e.target as HTMLElement | null;
-      setHovering(
-        !!el?.closest("a, button, [role='button'], [data-cursor='hover']"),
-      );
+    if (motionPaused) return;
+    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const move = (event: PointerEvent) => {
+      if (!media.matches || event.pointerType === "touch") return;
+      x.set(event.clientX);
+      y.set(event.clientY);
+      setVisible(true);
     };
+    const over = (event: PointerEvent) => {
+      const target = event.target;
+      setHovering(target instanceof Element && Boolean(target.closest("a, button, [role='button']")));
+    };
+    const hide = () => setVisible(false);
     window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerover", over, { passive: true });
+    document.addEventListener("pointerleave", hide);
+    window.addEventListener("blur", hide);
+    media.addEventListener("change", hide);
     return () => {
-      window.clearTimeout(enableTimer);
       window.removeEventListener("pointermove", move);
-      document.documentElement.classList.remove("cursor-ready");
+      window.removeEventListener("pointerover", over);
+      document.removeEventListener("pointerleave", hide);
+      window.removeEventListener("blur", hide);
+      media.removeEventListener("change", hide);
     };
-  }, [reduce, x, y]);
+  }, [motionPaused, x, y]);
 
-  if (!enabled || reduce) return null;
-
+  if (motionPaused) return null;
   return (
-    <>
-      <motion.div className="cursor-dot" style={{ x, y }} aria-hidden />
-      <motion.div
-        className="cursor-ring"
-        style={{ x: ringX, y: ringY }}
-        animate={{ scale: hovering ? 1.9 : 1, opacity: hovering ? 0.7 : 1 }}
-        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-        aria-hidden
-      />
-    </>
+    <motion.div
+      className={styles.cursorHalo}
+      style={{ x: ringX, y: ringY }}
+      animate={{ opacity: visible ? (hovering ? 0.6 : 0.28) : 0, scale: hovering ? 1.7 : 1 }}
+      transition={{ duration: 0.25 }}
+      aria-hidden="true"
+    />
   );
 }
