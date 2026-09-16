@@ -1,0 +1,99 @@
+.atlas { position: relative; padding: 58px clamp(22px, 5vw, 80px) 44px; background: #141510; border-top: 1px solid #f2f0e912; border-bottom: 1px solid #f2f0e912; overflow: hidden; }
+.inner { max-width: 1440px; margin-inline: auto; }
+.topline { display: flex; align-items: center; justify-content: space-between; color: #a1a494; font: 9px/1.5 var(--font-mono); letter-spacing: .11em; }
+.topline > span:first-child { display: flex; align-items: center; gap: 10px; }
+.topline i { width: 5px; height: 5px; border: 1px solid #ff6b35; transform: rotate(45deg); }
+.topline b { padding-inline: 18px; color: #ff6b35; font-weight: 400; }
+.layout { display: grid; grid-template-columns: minmax(235px, .72fr) 2fr; gap: clamp(32px, 5vw, 88px); align-items: center; padding: 38px 0 35px; }
+.copy h2 { font-size: clamp(29px, 3.5vw, 51px); line-height: 1.05; font-weight: 500; letter-spacing: -.055em; }
+.copy h2 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400; color: #b1b49f; letter-spacing: -.055em; }
+.intro { margin-top: 20px; font-size: 12px; line-height: 1.8; color: #a0a494; }
+.controls { margin-top: 29px; border-top: 1px solid #f2f0e91b; }
+.controls button { display: flex; width: 100%; align-items: center; gap: 13px; min-height: 55px; border-bottom: 1px solid #f2f0e91b; text-align: left; color: #828876; background: transparent; transition: color .3s, padding .3s; }
+.controls button:hover { color: #f2f0e9; padding-left: 5px; }
+.controls button[aria-pressed="true"] { color: #f2f0e9; }
+.cityIndex { font: 8px/1 var(--font-mono); color: #737a68; }
+.controls button[aria-pressed="true"] .cityIndex { color: #ff6b35; }
+.cityButtonName { display: flex; align-items: baseline; gap: 14px; flex: 1; font-size: 14px; }
+.cityButtonName > span { font-size: 10px; opacity: .65; letter-spacing: .08em; }
+.controls button svg { opacity: 0; transform: translate(-4px, 4px); transition: transform .3s, opacity .3s; color: #ff6b35; }
+.controls button[aria-pressed="true"] svg, .controls button:hover svg { opacity: 1; transform: translate(0, 0); }
+.scene { min-width: 0; }
+.sceneTop { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 0 0 14px; border-bottom: 1px solid #f2f0e91b; font: 9px/1.5 var(--font-mono); letter-spacing: .04em; color: #aaaE9e; }
+.sceneTop > span:first-child { color: #d3d6c6; }
+.landscape { display: block; width: 100%; height: auto; overflow: visible; }
+.city { opacity: 0; transform: translateY(5px); transition: opacity .7s ease, transform .9s cubic-bezier(.22,1,.36,1); }
+.city[data-active="true"] { opacity: 1; transform: translateY(0); }
+.city[data-active="true"] .outline { stroke-dasharray: 1; animation: trace 2.8s cubic-bezier(.22,1,.36,1) both; }
+.sun { transition: cx 1.2s cubic-bezier(.22,1,.36,1); }
+.svgLabel { fill: #8d9380; font: 8px var(--font-mono); letter-spacing: 1.5px; }
+.chinese { fill: #f2f0e9; opacity: .07; font: 65px sans-serif; letter-spacing: 5px; }
+.landmark text { fill: #c19174; font: 7px var(--font-mono); letter-spacing: .8px; }
+.waterFlow { animation: water 18s linear infinite; }
+.ferry { animation: sail 18s ease-in-out infinite alternate; }
+.sceneBottom { display: flex; justify-content: space-between; gap: 18px; align-items: center; border-top: 1px solid #f2f0e91b; padding-top: 19px; min-height: 64px; }
+.institution { display: flex; align-items: center; gap: 17px; }
+.institution > span { width: 55px; color: #ff8759; font-size: 15px; letter-spacing: -.04em; }
+.institution p { font-size: 11px; line-height: 1.5; color: #cbcebf; }
+.institution small { display: block; margin-top: 4px; font-size: 10px; color: #8c9480; }
+.years { flex-shrink: 0; font: 9px/1.5 var(--font-mono); color: #bdc3b0; }
+.route { display: flex; align-items: center; gap: 20px; color: #828c76; font: 8px/1.5 var(--font-mono); letter-spacing: .09em; }
+.route > span { white-space: nowrap; }
+.route > div { position: relative; height: 1px; flex: 1; background: linear-gradient(90deg, #ff6b3566, #ff6b3517); }
+.route > div::before, .route > div::after { content: ""; position: absolute; top: -2px; width: 5px; height: 5px; border: 1px solid #ff8759; background: #141510; border-radius: 50%; }
+.route > div::before { left: 0; }
+.route > div::after { right: 0; }
+.route i { display: block; position: absolute; left: 0; top: -1px; width: 15%; height: 3px; background: linear-gradient(90deg, transparent, #ff8759); animation: route 8s ease-in-out infinite; }
+.atlas[data-animate="false"] *, .city[data-active="false"] * { animation-play-state: paused !important; }
+.atlas[data-reduced="true"] .outline, .atlas[data-reduced="true"] .ferry, .atlas[data-reduced="true"] .waterFlow, .atlas[data-reduced="true"] .route i { animation: none; }
+.atlas[data-reduced="true"] .city, .atlas[data-reduced="true"] .sun { transition: none; }
+@keyframes trace { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes water { to { stroke-dashoffset: -776; } }
+@keyframes sail { from { transform: translateX(-24px); } to { transform: translateX(40px); } }
+@keyframes route { 0%, 12% { left: 0; opacity: 0; } 25%, 72% { opacity: .8; } 90%, 100% { left: 85%; opacity: 0; } }
+@media (min-width: 1700px) { .layout { grid-template-columns: .72fr 2fr; } }
+@media (max-width: 950px) {
+  .layout { grid-template-columns: minmax(210px, .8fr) 2fr; gap: 30px; }
+  .institution { gap: 9px; }
+  .institution > span { width: 42px; font-size: 13px; }
+  .institution p { font-size: 10px; }
+  .institution small { max-width: 205px; font-size: 9px; }
+  .years { font-size: 8px; }
+  .sceneTop { font-size: 8px; letter-spacing: 0; }
+}
+@media (max-width: 700px) {
+  .atlas { padding-top: 34px; padding-bottom: 29px; }
+  .topline { font-size: 7px; }
+  .topline b { padding-inline: 9px; }
+  .layout { display: block; padding: 27px 0; }
+  .copy { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; }
+  .copy h2 { font-size: clamp(31px, 7vw, 44px); }
+  .intro { align-self: end; text-align: right; margin: 0 0 3px; font-size: 10px; }
+  .controls { grid-column: 1 / -1; display: flex; gap: 24px; margin-top: 27px; border-top: none; }
+  .controls button { min-height: 46px; gap: 9px; }
+  .controls button[aria-pressed="true"] { border-color: #ff6b3580; }
+  .cityButtonName { font-size: 12px; gap: 8px; }
+  .cityButtonName > span { font-size: 9px; }
+  .scene { margin-top: 27px; }
+  .sceneTop { font-size: 8px; }
+  .landscape { width: calc(100% + 20px); max-width: none; margin-left: -10px; }
+  .sceneBottom { padding-top: 14px; gap: 12px; }
+  .institution { gap: 13px; }
+  .institution p { font-size: 10px; }
+  .institution small { max-width: none; font-size: 9px; }
+  .route { font-size: 7px; gap: 12px; letter-spacing: .03em; }
+}
+@media (max-width: 390px) {
+  .cityButtonName { gap: 6px; font-size: 11px; }
+  .controls { gap: 14px; }
+  .cityButtonName > span { font-size: 8px; }
+  .intro { font-size: 9px; }
+  .institution { gap: 8px; }
+  .institution > span { width: 36px; font-size: 12px; }
+  .institution p { font-size: 9px; }
+  .institution small { max-width: 175px; font-size: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .city, .sun { transition: none; }
+  .city .outline, .waterFlow, .ferry, .route i { animation: none !important; }
+}

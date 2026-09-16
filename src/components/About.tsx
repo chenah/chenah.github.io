@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
-import { about } from "@/lib/content";
+import { about, scholarProfile } from "@/lib/content";
 import { Reveal, ClipReveal, CountUp } from "@/components/motion-primitives";
 import styles from "./ResearchSections.module.css";
 
@@ -34,13 +34,16 @@ export function About() {
             <p className={styles.eyebrow}>Working at the intersection of</p>
             <ul className={styles.skills} aria-label="Research expertise">{about.skills.map((skill) => <li key={skill}>{skill}</li>)}</ul>
           </Reveal>
-          <div className={styles.stats}>
-            {about.stats.map((stat, index) => (
-              <Reveal key={stat.label} delay={index * 0.1} className={styles.stat}>
-                <span className={styles.statNumber}><CountUp to={Number(stat.num)} delay={0.1 + index * 0.12} /><span aria-hidden="true">↗</span></span>
-                <span className={styles.statLabel}>{stat.label}</span>
-              </Reveal>
-            ))}
+          <div>
+            <div className={styles.stats}>
+              {about.stats.map((stat, index) => (
+                <Reveal key={stat.label} delay={index * 0.1} className={styles.stat}>
+                  <span className={styles.statNumber}><CountUp to={Number(stat.num)} delay={0.1 + index * 0.12} /><span aria-hidden="true">↗</span></span>
+                  <span className={styles.statLabel}>{stat.label}</span>
+                </Reveal>
+              ))}
+            </div>
+            <p className={styles.statsSource}>Google Scholar · <time dateTime={scholarProfile.checkedAt}>{scholarProfile.displayDate}</time></p>
           </div>
         </div>
       </div>

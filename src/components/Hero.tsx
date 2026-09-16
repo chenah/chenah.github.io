@@ -10,7 +10,7 @@ import styles from "./Hero.module.css";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const [shape, setShape] = useState<"orbit" | "sphere">("orbit");
+  const [shape, setShape] = useState<"orbit" | "sphere" | "wave">("wave");
   const { motionPaused } = useMotionPreferences();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], motionPaused ? [0, 0] : [0, 100]);
@@ -21,7 +21,7 @@ export function Hero() {
       <div className={styles.heroGrid} aria-hidden="true" />
       <div className={styles.topline}>
         <span><i /> AI APPLICATIONS & HUMAN–COMPUTER INTERACTION</span>
-        <span>PERSONAL INDEX — 2026</span>
+        <a href="#cities" className={styles.cityLink}>HONG KONG <span>↗</span> GUANGZHOU</a>
       </div>
       <motion.div className={styles.main} style={{ y, opacity }}>
         <div className={styles.copy}>
@@ -41,11 +41,12 @@ export function Hero() {
         </div>
         <div className={styles.visual}>
           <div className={styles.fieldHeader}>
-            <span className={styles.fieldTitle}><Asterisk size={15} /> THE CURIOSITY FIELD</span>
+            <span className={styles.fieldTitle}><Asterisk size={15} /> IDEAS IN MOTION</span>
             <span className={styles.fieldEdition}>FIG. 001</span>
           </div>
           <div className={styles.canvasWrap}>
             <NeuralField shape={shape} />
+            <div className={styles.fieldCaption} aria-live="polite"><span>0{shape === "wave" ? 1 : shape === "orbit" ? 2 : 3} /</span> {shape === "wave" ? "Like water, ideas find a way." : shape === "orbit" ? "Different paths. Shared curiosity." : "A world of possibilities."}</div>
             <span className={`${styles.crosshair} ${styles.crosshairOne}`} aria-hidden="true">+</span>
             <span className={`${styles.crosshair} ${styles.crosshairTwo}`} aria-hidden="true">+</span>
             <span className={styles.axisLabel} aria-hidden="true">X / Y / Z</span>
@@ -53,16 +54,20 @@ export function Hero() {
           <div className={styles.fieldFooter}>
             <span className={styles.interact}><MoveUpRight size={13} /><span>MOVE TO INTERACT</span></span>
             <div className={styles.shapeControl} role="group" aria-label="Particle shape">
-              <button type="button" onClick={() => setShape("orbit")} aria-pressed={shape === "orbit"}>Orbit</button>
-              <button type="button" onClick={() => setShape("sphere")} aria-pressed={shape === "sphere"}>Sphere</button>
+              {([{ id: "wave", label: "Tide" }, { id: "orbit", label: "Orbit" }, { id: "sphere", label: "Sphere" }] as const).map((option) => (
+                <button key={option.id} type="button" onClick={() => setShape(option.id)} aria-pressed={shape === option.id}>
+                  {shape === option.id && <motion.span className={styles.shapeIndicator} layoutId="particle-shape" transition={{ duration: motionPaused ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }} />}
+                  <span>{option.label}</span>
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </motion.div>
       <div className={styles.bottomline}>
         <div className={styles.affiliation}><span className={styles.affiliationMark} aria-hidden="true">↳</span><p>PhD student · SCUT<span>School of Future Technology</span></p></div>
-        <p className={styles.location}>BASED IN GUANGZHOU, CN <span>23.13° N / 113.26° E</span></p>
-        <a href="#about" className={styles.scroll}>SCROLL TO DISCOVER <span><ArrowDown size={18} /></span></a>
+        <a href="#cities" className={styles.location}>香港 <span className={styles.cityRoute} aria-hidden="true" /> 广州 <span>FROM THE HARBOUR TO THE PEARL RIVER</span></a>
+        <a href="#cities" className={styles.scroll}>SCROLL TO DISCOVER <span><ArrowDown size={18} /></span></a>
       </div>
     </section>
   );

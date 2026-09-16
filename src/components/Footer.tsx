@@ -42,7 +42,7 @@ export function Footer() {
               <a key={link.label} href={link.href} target={link.href.startsWith("http") ? "_blank" : undefined} rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}>{link.label}<ArrowUpRight aria-hidden="true" size={14} /></a>
             ))}
           </nav>
-          <p className={styles.copyright}>© {new Date().getFullYear()} CHEN Guang</p>
+          <p className={styles.copyright}>© {new Date().getFullYear()} CHEN Guang <a href="#cities" className={styles.footerCities}>香港 → 广州</a></p>
           <a href="#top" onClick={toTop} className={styles.backToTop}>Back to top <span><ArrowUp aria-hidden="true" size={17} /></span></a>
         </div>
       </div>

@@ -11,7 +11,7 @@ import { Nav } from "@/components/Nav";
 
 export const metadata: Metadata = {
   title: "CHEN Guang — Human-Centered AI & Interactive Systems",
-  description: "CHEN Guang, PhD student in Intelligent Science and Technology at SCUT School of Future Technology. Research in AI applications, HCI, and intelligent education.",
+  description: "CHEN Guang, AI and HCI researcher. From Hong Kong Polytechnic University to SCUT in Guangzhou, exploring agentic AI, intelligent education, and human-centered interactive systems.",
   icons: { icon: "/icon.svg" },
 };
 

@@ -23,6 +23,18 @@
 .filter:hover { border-color: rgba(242, 240, 233, .2); color: #f2f0e9; }
 .filter.activeFilter { color: #10110f; background: #f2f0e9; }
 .archiveLabel { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #9b9d94; }
+.paperSearch { display: flex; align-items: center; gap: 10px; width: min(290px, 40%); min-height: 42px; padding: 0 12px; border: 1px solid #f2f0e91c; border-radius: 3px; color: #92978a; transition: border-color .2s; }
+.paperSearch:focus-within { border-color: #ff6b35; }
+.paperSearch input { width: 100%; min-width: 0; outline: none; color: #f2f0e9; font-size: 11px; background: transparent; }
+.paperSearch input::placeholder { color: #92978a; }
+.paperSearch input::-webkit-search-cancel-button { display: none; }
+.paperSearch > svg { flex-shrink: 0; }
+.paperSearch button { display: grid; place-items: center; min-width: 28px; min-height: 36px; }
+.paperSearch button:hover { color: #ff6b35; }
+.emptyPapers { padding: 50px 20px; text-align: center; border-bottom: 1px solid #f2f0e921; }
+.emptyPapers p { color: #b0b3a7; font-size: 14px; margin-bottom: 12px; }
+.sourceNote { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; margin-top: 30px; padding-top: 18px; border-top: 1px solid #f2f0e914; color: #95998d; font: 9px/1.7 var(--font-mono); }
+.sourceNote time { color: #c0c4b8; }
 .paperList { position: relative; }
 .paper { position: relative; display: grid; grid-template-columns: 64px 1fr 72px; gap: 25px; padding: 35px 0 37px; border-bottom: 1px solid rgba(242, 240, 233, .13); isolation: isolate; }
 .paper::before { content: ""; position: absolute; z-index: -1; inset: 0 -18px; background: #191a17; opacity: 0; transform: scaleY(.92); transition: opacity .4s, transform .5s cubic-bezier(.22, 1, .36, 1); }
@@ -87,6 +99,8 @@
 .footerLinks a { display: inline-flex; gap: 7px; align-items: center; min-height: 35px; color: #c3c5bc; font-size: 11px; transition: color .25s; }
 .footerLinks a:hover { color: #ff6b35; }
 .copyright { color: #858a7d; font-size: 10px; }
+.footerCities { display: inline-block; margin-left: 20px; color: #b4b9aa; letter-spacing: .08em; transition: color .2s; }
+.footerCities:hover { color: var(--accent); }
 .backToTop { display: flex; width: fit-content; justify-self: end; align-items: center; gap: 13px; color: #9b9d94; font-size: 10px; }
 .backToTop > span { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid rgba(242, 240, 233, .2); border-radius: 50%; transition: background .3s, color .3s; }
 .backToTop:hover > span { background: #f2f0e9; color: #10110f; }
@@ -119,7 +133,8 @@
   .archiveIntro > svg { display: none; }
   .archiveCount { font-size: 35px; flex-shrink: 0; }
   .archiveCount > span { display: block; font-size: 8px; margin-top: 8px; margin-left: 0; }
-  .archiveToolbar { padding-bottom: 17px; }
+  .archiveToolbar { padding-bottom: 17px; flex-direction: column; align-items: stretch; gap: 14px; }
+  .paperSearch { width: 100%; }
   .archiveLabel { display: none; }
   .filter { min-height: 40px; padding: 8px 12px; }
   .paper { grid-template-columns: 1fr 32px; gap: 16px; padding-block: 27px; }
@@ -159,6 +174,7 @@
   .footerLinks { grid-column: 1 / -1; justify-content: flex-start; gap: 25px; }
   .footerLinks a { font-size: 10px; }
   .copyright { font-size: 8px; }
+  .footerCities { margin-left: 0; display: block; margin-top: 6px; }
   .backToTop { font-size: 9px; gap: 8px; }
 }
 

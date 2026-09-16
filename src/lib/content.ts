@@ -7,8 +7,15 @@ export interface Publication {
   badges: { text: string; highlight?: boolean }[];
   title: string;
   authors: AuthorPart[];
+  /** Scholar listing year; falls back to the publisher when Scholar omits it. */
+  year: number;
+  /** Formal publication year when it differs from the conference/Scholar year. */
+  publicationYear?: number;
+  venue: string;
   citations?: number;
   link?: string;
+  scholarLink: string;
+  sourceUrl: string;
 }
 
 export interface ExperienceItem {
@@ -45,6 +52,19 @@ export const hero = {
   now: "SCUT · SCHOOL OF FUTURE TECHNOLOGY · SEP 2026",
 };
 
+/** Verified snapshot, not a live citation counter. See docs/research/scholar-update.md. */
+export const scholarProfile = {
+  profileUrl: "https://scholar.google.com/citations?user=vT5MqNYAAAAJ&hl=en",
+  checkedAt: "2026-09-16",
+  displayDate: "16 Sep 2026",
+  status: "verified",
+  publicationCount: 6,
+  citations: 45,
+  hIndex: 2,
+  i10Index: 1,
+  note: "Publication list and citation counts checked against Google Scholar on 16 Sep 2026.",
+} as const;
+
 export const about = {
   statement: "TURNING AI POSSIBILITY INTO REAL-WORLD APPLICATIONS.",
   skills: [
@@ -56,9 +76,9 @@ export const about = {
     "Virtual Reality",
   ],
   stats: [
-    { num: "6", label: "Scholar publications" },
-    { num: "34", label: "Scholar citations" },
-    { num: "2", label: "h-index" },
+    { num: String(scholarProfile.publicationCount), label: "Scholar publications" },
+    { num: String(scholarProfile.citations), label: "Scholar citations" },
+    { num: String(scholarProfile.hIndex), label: "h-index" },
   ],
 };
 
@@ -81,26 +101,33 @@ const scholarBase = "https://scholar.google.com/citations?view_op=view_citation&
 
 export const publications: Publication[] = [
   {
-    badges: [{ text: "CHB 2025" }, { text: "27 citations", highlight: true }],
-    title: "Avatar-mediated communication in collaborative Virtual Environments: A study on users' attention allocation and perception of social interactions",
+    badges: [{ text: "CHI 2026" }, { text: "1 citation", highlight: true }],
+    title: "Agentic Audio Moderator vs Human Moderator in Think-Aloud Usability Testing: Results from a Randomized Controlled Trial",
     authors: [
-      { t: "C. Li, Y. Dai, " },
+      { t: "W. Zhu, " },
       { t: "G. Chen", bold: true },
-      { t: ", J. Liu, P. Li, H. H. Ip" },
+      { t: ", Y. Wang, P. An, J. Du, C. Li" },
     ],
-    citations: 27,
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:u-x6o8ySG0sC`,
+    year: 2026,
+    venue: "CHI",
+    citations: 1,
+    link: "https://doi.org/10.1145/3772318.3791653",
+    scholarLink: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:UeHWp8X0CEIC`,
+    sourceUrl: "https://research.polyu.edu.hk/en/publications/agentic-audio-moderator-vs-human-moderator-in-think-aloud-usabili/",
   },
   {
-    badges: [{ text: "Frontiers in VR 2025" }, { text: "5 citations", highlight: true }],
-    title: "Assessing the Effect of Arousal on Performance in a Virtual Reality Narrative Scenario Using Biological Signals",
+    badges: [{ text: "BESC 2025" }, { text: "AI + Education", highlight: true }],
+    title: "Theory-Informed vs. Example-Driven Prompting for LLM-Based Qualitative Data Coding in Educational Research",
     authors: [
-      { t: "D. Archer, R. C. Li, " },
       { t: "G. Chen", bold: true },
-      { t: ", Y. Dai, A. Steed" },
+      { t: ", W. Zhu, Y. N. Yang, D. Sun, Z. Wen" },
     ],
-    citations: 5,
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:d1gkVwhDpl0C`,
+    year: 2025,
+    publicationYear: 2026,
+    venue: "BESC",
+    link: "https://doi.org/10.1007/978-981-95-7141-3_21",
+    scholarLink: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:IjCSPb-OGe4C`,
+    sourceUrl: "https://link.springer.com/chapter/10.1007/978-981-95-7141-3_21",
   },
   {
     badges: [{ text: "arXiv 2025" }, { text: "2 citations", highlight: true }],
@@ -110,27 +137,42 @@ export const publications: Publication[] = [
       { t: "G. Chen", bold: true },
       { t: ", Y. Zhu, L. Cai, X. Hu" },
     ],
+    year: 2025,
+    venue: "arXiv · Preprint",
     citations: 2,
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:2osOgNQ5qMEC`,
+    link: "https://arxiv.org/abs/2510.06617",
+    scholarLink: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:2osOgNQ5qMEC`,
+    sourceUrl: "https://arxiv.org/abs/2510.06617",
   },
   {
-    badges: [{ text: "CHI 2026" }, { text: "CCF-A", highlight: true }],
-    title: "Agentic Audio Moderator vs Human Moderator in Think-Aloud Usability Testing: Results from a Randomized Controlled Trial",
+    badges: [{ text: "CHB 2025" }, { text: "38 citations", highlight: true }],
+    title: "Avatar-mediated communication in collaborative Virtual Environments: A study on users' attention allocation and perception of social interactions",
     authors: [
-      { t: "W. Zhu, " },
+      { t: "C. Li, Y. Dai, " },
       { t: "G. Chen", bold: true },
-      { t: ", Y. Wang, P. An, J. Du, C. Li" },
+      { t: ", J. Liu, P. Li, H. H. Ip" },
     ],
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:UeHWp8X0CEIC`,
+    year: 2025,
+    venue: "Computers in Human Behavior",
+    citations: 38,
+    link: "https://doi.org/10.1016/j.chb.2025.108598",
+    scholarLink: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:u-x6o8ySG0sC`,
+    sourceUrl: "https://www.sciencedirect.com/science/article/pii/S0747563225000457",
   },
   {
-    badges: [{ text: "BESC 2025" }, { text: "AI + Education", highlight: true }],
-    title: "Theory-Informed vs. Example-Driven Prompting for LLM-Based Qualitative Data Coding in Educational Research",
+    badges: [{ text: "Frontiers in VR 2025" }, { text: "4 citations", highlight: true }],
+    title: "Assessing the Effect of Arousal on Performance in a Virtual Reality Narrative Scenario Using Biological Signals",
     authors: [
+      { t: "D. Archer, C. Li, " },
       { t: "G. Chen", bold: true },
-      { t: ", W. Zhu, Y. N. Yang, D. Sun, Z. Wen" },
+      { t: ", Y. Dai, A. Steed" },
     ],
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:IjCSPb-OGe4C`,
+    year: 2025,
+    venue: "Frontiers in Virtual Reality",
+    citations: 4,
+    link: "https://doi.org/10.3389/frvir.2025.1458191",
+    scholarLink: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:d1gkVwhDpl0C`,
+    sourceUrl: "https://www.frontiersin.org/journals/virtual-reality/articles/10.3389/frvir.2025.1458191/full",
   },
   {
     badges: [{ text: "SETE 2024" }, { text: "Edu-Metaverse", highlight: true }],
@@ -140,7 +182,12 @@ export const publications: Publication[] = [
       { t: "G. Chen", bold: true },
       { t: ", Y. Wang, P. H. F. Ng, L. Zhou, Q. Li, C. Li" },
     ],
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:u5HHmVD_uO8C`,
+    year: 2024,
+    publicationYear: 2025,
+    venue: "SETE",
+    link: "https://doi.org/10.1007/978-981-96-4407-0_4",
+    scholarLink: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:u5HHmVD_uO8C`,
+    sourceUrl: "https://link.springer.com/chapter/10.1007/978-981-96-4407-0_4",
   },
 ];
 
@@ -180,7 +227,7 @@ export const projects: Project[] = [
     venue: "CHI",
     year: "2026",
     figure: "/figures/audio.jpg",
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:UeHWp8X0CEIC`,
+    link: "https://doi.org/10.1145/3772318.3791653",
   },
   {
     title: "AI Role Preferences in Mathematical Modelling",
@@ -189,7 +236,7 @@ export const projects: Project[] = [
     venue: "arXiv",
     year: "2025",
     figure: "/figures/network.png",
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:2osOgNQ5qMEC`,
+    link: "https://arxiv.org/abs/2510.06617",
   },
   {
     title: "Avatar-Mediated Communication in Collaborative VR",
@@ -198,7 +245,7 @@ export const projects: Project[] = [
     venue: "CHB",
     year: "2025",
     figure: "/figures/avatar.jpg",
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:u-x6o8ySG0sC`,
+    link: "https://doi.org/10.1016/j.chb.2025.108598",
   },
   {
     title: "LLM Prompting for Qualitative Research Coding",
@@ -207,7 +254,7 @@ export const projects: Project[] = [
     venue: "BESC",
     year: "2025",
     figure: "/figures/coding.png",
-    link: `${scholarBase}&citation_for_view=vT5MqNYAAAAJ:IjCSPb-OGe4C`,
+    link: "https://doi.org/10.1007/978-981-95-7141-3_21",
   },
 ];
 
@@ -223,6 +270,6 @@ export const marqueeItems = [
 
 export const contact = {
   email: "guang.chen@connect.polyu.hk",
-  scholar: "https://scholar.google.com/citations?user=vT5MqNYAAAAJ&hl=zh-CN",
+  scholar: scholarProfile.profileUrl,
   github: "https://github.com/chenah",
 };
